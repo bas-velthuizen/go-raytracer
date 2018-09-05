@@ -171,3 +171,99 @@ func Test_Adding_two_points(t *testing.T) {
 		t.Errorf("%v + %v returns Vector? %t, wanted false", a1, a2, p.IsVector())
 	}
 }
+
+// Scenario: Subtracting two points
+// Given p1 ← point(3, 2, 1)
+// And p2 ← point(5, 6, 7)
+// Then p1 - p2 = vector(-2, -4, -6)
+func Test_Subtracting_two_points(t *testing.T) {
+	// Given
+	p1 := Point(3, 2, 1)
+	p2 := Point(5, 6, 7)
+	//Expected
+	wanted := Vector(-2, -4, -6)
+	// Then
+	p := p1.Subtract(p2)
+	if !p.Equals(wanted) {
+		t.Errorf("%v - %v = %v, want %v", p1, p2, p, wanted)
+	}
+	if p.IsPoint() {
+		t.Errorf("%v + %v returns Point? %t, wanted false", p1, p2, p.IsPoint())
+	}
+	if !p.IsVector() {
+		t.Errorf("%v + %v returns Vector? %t, wanted true", p1, p2, p.IsVector())
+	}
+}
+
+// Scenario: Subtracting a vector from a point
+// Given p ← point(3, 2, 1)
+// And v ← vector(5, 6, 7)
+// Then p - v = point(-2, -4, -6)
+func Test_Subtracting_vector_from_point(t *testing.T) {
+	// Given
+	p1 := Point(3, 2, 1)
+	v := Vector(5, 6, 7)
+	//Expected
+	wanted := Point(-2, -4, -6)
+	// Then
+	p := p1.Subtract(v)
+	if !p.Equals(wanted) {
+		t.Errorf("%v - %v = %v, want %v", p1, v, p, wanted)
+	}
+	if !p.IsPoint() {
+		t.Errorf("%v + %v returns Point? %t, wanted true", p1, v, p.IsPoint())
+	}
+	if p.IsVector() {
+		t.Errorf("%v + %v returns Vector? %t, wanted false", p1, v, p.IsVector())
+	}
+}
+
+// Scenario: Subtracting two vectors
+// Given v1 ← vector(3, 2, 1)
+// And v2 ← vector(5, 6, 7)
+// Then v1 - v2 = vector(-2, -4, -6)
+func Test_Subtracting_two_vectors(t *testing.T) {
+	// Given
+	v1 := Vector(3, 2, 1)
+	v2 := Vector(5, 6, 7)
+	//Expected
+	wanted := Vector(-2, -4, -6)
+	// Then
+	v := v1.Subtract(v2)
+	if !v.Equals(wanted) {
+		t.Errorf("%v - %v = %v, want %v", v1, v2, v, wanted)
+	}
+	if v.IsPoint() {
+		t.Errorf("%v + %v returns Point? %t, wanted false", v1, v2, v.IsPoint())
+	}
+	if !v.IsVector() {
+		t.Errorf("%v + %v returns Vector? %t, wanted true", v1, v2, v.IsVector())
+	}
+}
+
+// Scenario: Subtracting a vector from the zero vector
+// Given zero ← vector(0, 0, 0)
+// And v ← vector(1, -2, 3)
+// Then zero - v = vector(-1, 2, -3)
+func Test_Subtracting_vector_from_zero_vector(t *testing.T) {
+	// Given
+	v1 := Vector(1, -2, 3)
+	zero := Vector(0, 0, 0)
+	//Expected
+	wanted := Vector(-1, 2, -3)
+	// Then
+	v := zero.Subtract(v1)
+	if !v.Equals(wanted) {
+		t.Errorf("%v - %v = %v, want %v", zero, v1, v, wanted)
+	}
+	if v.IsPoint() {
+		t.Errorf("%v + %v returns Point? %t, wanted false", zero, v1, v.IsPoint())
+	}
+	if !v.IsVector() {
+		t.Errorf("%v + %v returns Vector? %t, wanted true", zero, v1, v.IsVector())
+	}
+}
+
+// Scenario: Negating a tuple
+// Given a ← tuple(1, -2, 3, -4)
+// Then -a = tuple(-1, 2, -3, 4)

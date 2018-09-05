@@ -35,6 +35,11 @@ func (t Tuple) Add(other Tuple) Tuple {
 	return Tuple{t.X + other.X, t.Y + other.Y, t.Z + other.Z, t.W + other.W}
 }
 
+// Subtract subtracts a Tuple from the current Tuple
+func (t Tuple) Subtract(other Tuple) Tuple {
+	return Tuple{t.X - other.X, t.Y - other.Y, t.Z - other.Z, t.W - other.W}
+}
+
 // Point creates a new Point type Tuple
 func Point(x float64, y float64, z float64) Tuple {
 	return Tuple{x, y, z, 1.0}
