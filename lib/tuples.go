@@ -2,7 +2,7 @@ package lib
 
 import "math"
 
-const tolerance = 1e-9
+const epsilon = 1e-5
 
 // Tuple models a point (w = 1.0) or vector (w = 0.0)
 type Tuple struct {
@@ -19,15 +19,20 @@ func (t Tuple) IsPoint() bool {
 
 // IsVector checks if the Tuple is a Vector
 func (t Tuple) IsVector() bool {
-	return !t.IsPoint()
+	return t.W == 0.0
 }
 
 // Equals checks if two Tuples are equal
 func (t Tuple) Equals(other Tuple) bool {
-	return math.Abs(t.X-other.X) < tolerance &&
-		math.Abs(t.Y-other.Y) < tolerance &&
-		math.Abs(t.Z-other.Z) < tolerance &&
-		math.Abs(t.W-other.W) < tolerance
+	return math.Abs(t.X-other.X) < epsilon &&
+		math.Abs(t.Y-other.Y) < epsilon &&
+		math.Abs(t.Z-other.Z) < epsilon &&
+		math.Abs(t.W-other.W) < epsilon
+}
+
+// Add adds a Tuple to the current Tuple
+func (t Tuple) Add(other Tuple) Tuple {
+	return Tuple{t.X + other.X, t.Y + other.Y, t.Z + other.Z, t.W + other.W}
 }
 
 // Point creates a new Point type Tuple

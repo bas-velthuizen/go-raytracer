@@ -93,3 +93,81 @@ func Test_Vector_describes_tuples_with_w_1(t *testing.T) {
 		t.Errorf("Vector(4, -4, 3) == %v, want %v", p, wanted)
 	}
 }
+
+//Scenario: Adding a point and a vector
+//Given a1 ← tuple(3, -2, 5, 1)
+//And a2 ← tuple(-2, 3, 1, 0)
+//Then a1 + a2 = tuple(1, 1, 6, 1)
+func Test_Adding_point_and_vector(t *testing.T) {
+	// Given
+	a1 := Tuple{3, -2, 5, 1}
+	a2 := Tuple{-2, 3, 1, 0}
+	//Expected
+	wanted := Tuple{1, 1, 6, 1}
+	// Then
+	p := a1.Add(a2)
+	if !p.Equals(wanted) {
+		t.Errorf("%v + %v = %v, want %v", a1, a2, p, wanted)
+	}
+	if !p.IsPoint() {
+		t.Errorf("%v + %v returns Point? %t, wanted true", a1, a2, p.IsPoint())
+	}
+
+	// Given
+	a1 = Tuple{3, -2, 5, 0}
+	a2 = Tuple{-2, 3, 1, 1}
+	//Expected
+	wanted = Tuple{1, 1, 6, 1}
+	// Then
+	p = a1.Add(a2)
+	if !p.Equals(wanted) {
+		t.Errorf("%v + %v = %v, want %v", a1, a2, p, wanted)
+	}
+	if !p.IsPoint() {
+		t.Errorf("%v + %v returns Point? %t, wanted true", a1, a2, p.IsPoint())
+	}
+
+}
+
+//Scenario: Adding two vectors
+//Given a1 ← tuple(3, -2, 5, 0)
+//And a2 ← tuple(-2, 3, 1, 0)
+//Then a1 + a2 = tuple(1, 1, 6, 0)
+func Test_Adding_two_vectors(t *testing.T) {
+	// Given
+	a1 := Tuple{3, -2, 5, 0}
+	a2 := Tuple{-2, 3, 1, 0}
+	//Expected
+	wanted := Tuple{1, 1, 6, 0}
+	// Then
+	p := a1.Add(a2)
+	if !p.Equals(wanted) {
+		t.Errorf("%v + %v = %v, want %v", a1, a2, p, wanted)
+	}
+	if !p.IsVector() {
+		t.Errorf("%v + %v returns Vector? %t, wanted true", a1, a2, p.IsVector())
+	}
+}
+
+//Scenario: Adding two points
+//Given a1 ← tuple(3, -2, 5, 1)
+//And a2 ← tuple(-2, 3, 1, 1)
+//Then a1 + a2 = tuple(1, 1, 6, 2) ; neither a Point nor a Vector
+func Test_Adding_two_points(t *testing.T) {
+	// Given
+	a1 := Tuple{3, -2, 5, 1}
+	a2 := Tuple{-2, 3, 1, 1}
+	//Expected
+	wanted := Tuple{1, 1, 6, 2}
+	// Then
+	p := a1.Add(a2)
+	if !p.Equals(wanted) {
+		t.Errorf("%v + %v = %v, want %v", a1, a2, p, wanted)
+	}
+	if p.IsPoint() {
+		t.Errorf("%v + %v returns Point? %t, wanted false", a1, a2, p.IsPoint())
+	}
+	if p.IsVector() {
+		t.Errorf("%v + %v returns Vector? %t, wanted false", a1, a2, p.IsVector())
+	}
+}
