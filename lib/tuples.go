@@ -60,6 +60,11 @@ func (t Tuple) Magnitude() float64 {
 	return math.Sqrt(t.X*t.X + t.Y*t.Y + t.Z*t.Z + t.W*t.W)
 }
 
+// Normalize normalizes a Vector
+func (t Tuple) Normalize() Tuple {
+	return t.DivideBy(t.Magnitude())
+}
+
 // Point creates a new Point type Tuple
 func Point(x float64, y float64, z float64) Tuple {
 	return Tuple{x, y, z, 1.0}
