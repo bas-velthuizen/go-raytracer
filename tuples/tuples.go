@@ -1,4 +1,4 @@
-package lib
+package tuples
 
 import "math"
 

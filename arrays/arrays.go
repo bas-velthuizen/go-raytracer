@@ -1,4 +1,4 @@
-package lib
+package arrays
 
 // Concat concatenates two arrays of integers
 func Concat(a []int, b []int) []int {
