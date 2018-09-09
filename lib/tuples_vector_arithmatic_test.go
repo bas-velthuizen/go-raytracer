@@ -65,3 +65,43 @@ func Test_Normalizing_a_Vector(t *testing.T) {
 		}
 	}
 }
+
+// Scenario: The dot product of two tuples
+// Given a ← vector(1, 2, 3)
+// And b ← vector(2, 3, 4) Then a dot b = 20
+func Test_Dot_Product_of_two_Vectors(t *testing.T) {
+	// Given
+	t1 := Vector(1, 2, 3)
+	t2 := Vector(2, 3, 4)
+	// Expected
+	wanted := 20.0
+	// Then
+	d := t1.Dot(t2)
+	if d != wanted {
+		t.Errorf("%v . %v = %v, want %v", t1, t2, d, wanted)
+	}
+}
+
+// Scenario: Cross product of two vectors
+// Given a ← vector(1, 2, 3)
+// And b ← vector(2, 3, 4)
+// Then a cross b = vector(-1, 2, -1)
+// And b cross a = vector(1, -2, 1)
+func Test_Cross_Product_of_two_Vectors(t *testing.T) {
+	// Given
+	t1 := Vector(1, 2, 3)
+	t2 := Vector(2, 3, 4)
+	// Expected
+	wanted1 := Vector(-1, 2, -1)
+	wanted2 := Vector(1, -2, 1)
+	// Then
+	v1 := t1.Cross(t2)
+	v2 := t2.Cross(t1)
+	if !wanted1.Equals(v1) {
+		t.Errorf("%v x %v = %v, want %v", t1, t2, v1, wanted1)
+	}
+	if !wanted2.Equals(v2) {
+		t.Errorf("%v x %v = %v, want %v", t2, t1, v2, wanted2)
+	}
+
+}
