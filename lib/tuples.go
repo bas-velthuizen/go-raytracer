@@ -50,6 +50,16 @@ func (t Tuple) Multiply(factor float64) Tuple {
 	return Tuple{t.X * factor, t.Y * factor, t.Z * factor, t.W * factor}
 }
 
+// DivideBy divides a Tuple by a scalar
+func (t Tuple) DivideBy(factor float64) Tuple {
+	return Tuple{t.X / factor, t.Y / factor, t.Z / factor, t.W / factor}
+}
+
+// Magnitude calculates the magnitude of a vector
+func (t Tuple) Magnitude() float64 {
+	return math.Sqrt(t.X*t.X + t.Y*t.Y + t.Z*t.Z + t.W*t.W)
+}
+
 // Point creates a new Point type Tuple
 func Point(x float64, y float64, z float64) Tuple {
 	return Tuple{x, y, z, 1.0}
