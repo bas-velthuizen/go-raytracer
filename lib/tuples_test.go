@@ -102,7 +102,7 @@ func Test_Adding_point_and_vector(t *testing.T) {
 	// Given
 	a1 := Tuple{3, -2, 5, 1}
 	a2 := Tuple{-2, 3, 1, 0}
-	//Expected
+	// Expected
 	wanted := Tuple{1, 1, 6, 1}
 	// Then
 	p := a1.Add(a2)
@@ -116,7 +116,7 @@ func Test_Adding_point_and_vector(t *testing.T) {
 	// Given
 	a1 = Tuple{3, -2, 5, 0}
 	a2 = Tuple{-2, 3, 1, 1}
-	//Expected
+	// Expected
 	wanted = Tuple{1, 1, 6, 1}
 	// Then
 	p = a1.Add(a2)
@@ -137,7 +137,7 @@ func Test_Adding_two_vectors(t *testing.T) {
 	// Given
 	a1 := Tuple{3, -2, 5, 0}
 	a2 := Tuple{-2, 3, 1, 0}
-	//Expected
+	// Expected
 	wanted := Tuple{1, 1, 6, 0}
 	// Then
 	p := a1.Add(a2)
@@ -157,7 +157,7 @@ func Test_Adding_two_points(t *testing.T) {
 	// Given
 	a1 := Tuple{3, -2, 5, 1}
 	a2 := Tuple{-2, 3, 1, 1}
-	//Expected
+	// Expected
 	wanted := Tuple{1, 1, 6, 2}
 	// Then
 	p := a1.Add(a2)
@@ -180,7 +180,7 @@ func Test_Subtracting_two_points(t *testing.T) {
 	// Given
 	p1 := Point(3, 2, 1)
 	p2 := Point(5, 6, 7)
-	//Expected
+	// Expected
 	wanted := Vector(-2, -4, -6)
 	// Then
 	p := p1.Subtract(p2)
@@ -203,7 +203,7 @@ func Test_Subtracting_vector_from_point(t *testing.T) {
 	// Given
 	p1 := Point(3, 2, 1)
 	v := Vector(5, 6, 7)
-	//Expected
+	// Expected
 	wanted := Point(-2, -4, -6)
 	// Then
 	p := p1.Subtract(v)
@@ -226,7 +226,7 @@ func Test_Subtracting_two_vectors(t *testing.T) {
 	// Given
 	v1 := Vector(3, 2, 1)
 	v2 := Vector(5, 6, 7)
-	//Expected
+	// Expected
 	wanted := Vector(-2, -4, -6)
 	// Then
 	v := v1.Subtract(v2)
@@ -249,7 +249,7 @@ func Test_Subtracting_vector_from_zero_vector(t *testing.T) {
 	// Given
 	v1 := Vector(1, -2, 3)
 	zero := Vector(0, 0, 0)
-	//Expected
+	// Expected
 	wanted := Vector(-1, 2, -3)
 	// Then
 	v := zero.Subtract(v1)
@@ -267,3 +267,44 @@ func Test_Subtracting_vector_from_zero_vector(t *testing.T) {
 // Scenario: Negating a tuple
 // Given a ← tuple(1, -2, 3, -4)
 // Then -a = tuple(-1, 2, -3, 4)
+func Test_Negating_a_tuple(t *testing.T) {
+	// Given
+	t1 := Tuple{1, -2, 3, -4}
+	// Expected
+	wanted := Tuple{-1, 2, -3, 4}
+	// Then
+	t2 := t1.Negate()
+	if !t2.Equals(wanted) {
+		t.Errorf("- %v = %v, want %v", t1, t2, wanted)
+	}
+}
+
+// Scenario: Multiplying a tuple by a scalar
+// Given a ← tuple(1, -2, 3, -4)
+// Then a * 3.5 = tuple(3.5, -7, 10.5, -14)
+func Test_Multiplying_a_tuple_by_a_scalar(t *testing.T) {
+	// Given
+	t1 := Tuple{1, -2, 3, -4}
+	// Expected
+	wanted := Tuple{3.5, -7, 10.5, -14}
+	// Then
+	t2 := t1.Multiply(3.5)
+	if !t2.Equals(wanted) {
+		t.Errorf("3.5 * %v = %v, want %v", t1, t2, wanted)
+	}
+}
+
+// Scenario: Multiplying a tuple by a fraction
+// Given a ← tuple(1, -2, 3, -4)
+// Then a * 0.5 = tuple(0.5, -1, 1.5, -2)
+func Test_Multiplying_a_tuple_by_a_faraction(t *testing.T) {
+	// Given
+	t1 := Tuple{1, -2, 3, -4}
+	// Expected
+	wanted := Tuple{0.5, -1, 1.5, -2}
+	// Then
+	t2 := t1.Multiply(.5)
+	if !t2.Equals(wanted) {
+		t.Errorf(".5 * %v = %v, want %v", t1, t2, wanted)
+	}
+}

@@ -40,6 +40,16 @@ func (t Tuple) Subtract(other Tuple) Tuple {
 	return Tuple{t.X - other.X, t.Y - other.Y, t.Z - other.Z, t.W - other.W}
 }
 
+// Negate negates a Tuple
+func (t Tuple) Negate() Tuple {
+	return Tuple{-t.X, -t.Y, -t.Z, -t.W}
+}
+
+// Multiply multiplies a Tuple with a scalar
+func (t Tuple) Multiply(factor float64) Tuple {
+	return Tuple{t.X * factor, t.Y * factor, t.Z * factor, t.W * factor}
+}
+
 // Point creates a new Point type Tuple
 func Point(x float64, y float64, z float64) Tuple {
 	return Tuple{x, y, z, 1.0}
