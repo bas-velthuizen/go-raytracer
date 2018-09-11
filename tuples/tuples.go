@@ -57,6 +57,7 @@ func (t Tuple) DivideBy(factor float64) Tuple {
 
 // Magnitude calculates the magnitude of a vector
 func (t Tuple) Magnitude() float64 {
+	// Try this out: https://en.wikipedia.org/wiki/Fast_inverse_square_root
 	return math.Sqrt(t.X*t.X + t.Y*t.Y + t.Z*t.Z + t.W*t.W)
 }
 

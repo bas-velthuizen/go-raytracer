@@ -3,7 +3,9 @@ package canvas
 import (
 	"fmt"
 	"github.com/bas-velthuizen/go-raytracer/colors"
+	"log"
 	"math"
+	"strconv"
 )
 
 // Canvas implements a canvas on which bitmap images can be projected/drawn
@@ -20,9 +22,15 @@ type PPM struct {
 // NewCanvas creates a new Canvas and returns a pointer to it
 func NewCanvas(width int, height int) *Canvas {
 	c := Canvas{width, height, make([]colors.Color, width*height)}
-	for i := 0; i < cap(c.grid); i++ {
-		c.grid[i] = colors.Color{Red: 0, Green: 0, Blue: 0}
+	for y := 0; y < height; y++ {
+		fmt.Printf("%d of %d\n", y, height)
+		for x := 0; x < width; x++ {
+			fmt.Print(".")
+			c.grid[y*width+x] = colors.Color{Red: 0, Green: 0, Blue: 0}
+		}
+		fmt.Println()
 	}
+	fmt.Println()
 	return &c
 }
 
@@ -38,29 +46,46 @@ func (c Canvas) Set(x int, y int, color colors.Color) {
 
 // ToPPM creates a PPM data structure of the Canvas
 func (c Canvas) ToPPM() PPM {
-	lines := []string{"P3", "5 3", "255"}
+	lines := []string{"P3", fmt.Sprintf("%d %d", c.Width, c.Height), "255"}
 	for row := 0; row < c.Height; row++ {
-		line := ""
+		log.Printf("Row: %d of %d...", row+1, c.Height)
+		stringList := make([]string, c.Width*c.Height*3)
 		for col := 0; col < c.Width; col++ {
 			color := c.Get(col, row)
-			toPPMColorComponent(color.Red)
-
-			line += fmt.Sprintf("%d %d %d", toPPMColorComponent(color.Red), toPPMColorComponent(color.Green), toPPMColorComponent(color.Blue))
-			if col != c.Width-1 {
+			stringList = append(stringList, strconv.Itoa(toPPMColorComponent(color.Red)), strconv.Itoa(toPPMColorComponent(color.Green)), strconv.Itoa(toPPMColorComponent(color.Blue)))
+		}
+		line := ""
+		for i:=0; i < len(stringList); i++ {
+			if len(line + stringList[i]) >= 70 {
+				lines = append(lines, line)
+				line = ""
+			}
+			if len(line) > 0 {
 				line += " "
 			}
+			line += stringList[i]
 		}
 		lines = append(lines, line)
 	}
+	log.Print("done")
 	return PPM{lines}
 }
 
-func toPPMColorComponent(component float64) uint {
+// ToString writes the color pixmap to a string
+func (p PPM) ToString() string {
+	result := ""
+	for i := 0; i < len(p.Lines); i++ {
+		result += fmt.Sprintf("%s\n", p.Lines[i])
+	}
+	return result
+}
+
+func toPPMColorComponent(component float64) int {
 	value := int(math.Round(255 * component))
 	if value < 0 {
 		value = 0
 	} else if value > 255 {
 		value = 255
 	}
-	return uint(value)
+	return value
 }

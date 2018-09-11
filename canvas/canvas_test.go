@@ -1,6 +1,7 @@
 package canvas
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/bas-velthuizen/go-raytracer/colors"
@@ -112,4 +113,56 @@ func Test_Construct_PPM_Pixel_Data(t *testing.T) {
 			t.Errorf("line[%d] == %s, want %s", i, ppm.Lines[i], lines[i-3])
 		}
 	}
+}
+
+// Scenario: Splitting long lines in PPM files
+// Given c ← canvas(10, 2)
+// When every pixel of c is set to color(1, 0.8, 0.6)
+// And ppm ← canvas_to_ppm(c)
+// Then lines 4-7 of ppm are
+// """
+// 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204
+// 153 255 204 153 255 204 153 255 204 153 255 204 153
+// 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204
+// 153 255 204 153 255 204 153 255 204 153 255 204 153
+// """
+func Test_Construct_PPM_Pixel_Data_with_Long_Lines(t *testing.T) {
+	// Given
+	c := NewCanvas(10, 2)
+	//When
+	for y:=0; y < 2; y++ {
+		for x:=0; x < 10; x++ {
+			c.Set(x, y, colors.Color{Red:1, Green: 0.8, Blue: 0.6})
+		}
+	}
+	ppm := c.ToPPM()
+	// Expected
+	lines := []string{
+		"255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204",
+		"153 255 204 153 255 204 153 255 204 153 255 204 153",
+		"255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204",
+		"153 255 204 153 255 204 153 255 204 153 255 204 153",
+	}
+	// Then
+	for i := 3; i < 7; i++ {
+		if ppm.Lines[i] != lines[i - 3] {
+			t.Errorf("line[%d] == %s (%d), want %s (%d)", i, ppm.Lines[i], len(ppm.Lines[i]), lines[i-3], len(lines[i-3]))
+		}
+	}
+}
+
+// Scenario: PPM files are terminated by a newline
+// Given c ← canvas(5, 3)
+// When ppm ← canvas_to_ppm(c)
+// Then the last character of ppm is a newline
+func Test_PPM_Terminated_by_Newline(t *testing.T) {
+	// Given
+	c := NewCanvas(5, 3)
+	// When
+	ppm := c.ToPPM().ToString()
+	// Then
+	if ppm[len(ppm)-1] != '\n' {
+		t.Errorf("Expected %s as last character, was %s", fmt.Sprintf("% x", '\n'), fmt.Sprintf("% x", ppm[len(ppm)-1]))
+	}
+
 }
