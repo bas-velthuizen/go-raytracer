@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/bas-velthuizen/go-raytracer/canvas"
 	"github.com/bas-velthuizen/go-raytracer/colors"
-	"io/ioutil"
 	"math"
 
 	"github.com/bas-velthuizen/go-raytracer/tuples"
@@ -47,7 +46,7 @@ func main() {
 	}
 
 	fmt.Println("Curve finished, now saving")
-	err := ioutil.WriteFile("./curve.ppm", []byte(c.ToPPM().ToString()), 0644)
+	err := c.ToPPM().ToFile("./curve.ppm")
 	if err != nil {
 		fmt.Println(err)
 	}

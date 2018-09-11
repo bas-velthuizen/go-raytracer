@@ -5,6 +5,7 @@ import (
 	"github.com/bas-velthuizen/go-raytracer/colors"
 	"log"
 	"math"
+	"os"
 	"strconv"
 )
 
@@ -78,6 +79,23 @@ func (p PPM) ToString() string {
 		result += fmt.Sprintf("%s\n", p.Lines[i])
 	}
 	return result
+}
+
+// ToFile writes the color pixmap to a file
+func (p PPM) ToFile(path string) error {
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	for i := 0; i < len(p.Lines); i++ {
+		_, writeErr := file.WriteString( fmt.Sprintf("%s\n", p.Lines[i]) )
+		if writeErr != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func toPPMColorComponent(component float64) int {
