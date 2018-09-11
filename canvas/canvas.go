@@ -24,14 +24,12 @@ type PPM struct {
 func NewCanvas(width int, height int) *Canvas {
 	c := Canvas{width, height, make([]colors.Color, width*height)}
 	for y := 0; y < height; y++ {
-		fmt.Printf("%d of %d\n", y, height)
+		log.Printf("Initializing %d of %d...\n", y+1, height)
 		for x := 0; x < width; x++ {
-			fmt.Print(".")
 			c.grid[y*width+x] = colors.Color{Red: 0, Green: 0, Blue: 0}
 		}
-		fmt.Println()
 	}
-	fmt.Println()
+	log.Println("Canvas initialization done")
 	return &c
 }
 
@@ -49,7 +47,7 @@ func (c Canvas) Set(x int, y int, color colors.Color) {
 func (c Canvas) ToPPM() PPM {
 	lines := []string{"P3", fmt.Sprintf("%d %d", c.Width, c.Height), "255"}
 	for row := 0; row < c.Height; row++ {
-		log.Printf("Row: %d of %d...", row+1, c.Height)
+		log.Printf("Exporting row: %d of %d...", row+1, c.Height)
 		stringList := make([]string, c.Width*c.Height*3)
 		for col := 0; col < c.Width; col++ {
 			color := c.Get(col, row)
@@ -68,7 +66,7 @@ func (c Canvas) ToPPM() PPM {
 		}
 		lines = append(lines, line)
 	}
-	log.Print("done")
+	log.Print("Exporting done")
 	return PPM{lines}
 }
 
