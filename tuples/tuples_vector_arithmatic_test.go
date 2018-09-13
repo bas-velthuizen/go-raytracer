@@ -103,5 +103,4 @@ func Test_Cross_Product_of_two_Vectors(t *testing.T) {
 	if !wanted2.Equals(v2) {
 		t.Errorf("%v x %v = %v, want %v", t2, t1, v2, wanted2)
 	}
-
 }

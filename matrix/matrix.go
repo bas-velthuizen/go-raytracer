@@ -1,6 +1,7 @@
 package matrix
 
 import (
+	"github.com/bas-velthuizen/go-raytracer/tuples"
 	"log"
 )
 
@@ -18,19 +19,24 @@ func NewMatrix(data [][]float64) *Matrix {
 	}
 	result := Matrix{size: size, data: make([]float64, size * size)}
 
-	for y := 0; y < size; y++ {
-		for x := 0; x < size; x++ {
-			result.data[y*size+x] = data[x][y]
-			log.Printf("(%d, %d) = %f", x, y, data[x][y])
+	for row := 0; row < size; row++ {
+		for col := 0; col < size; col++ {
+			result.Set(row, col, data[row][col])
+			log.Printf("(%d, %d) = %f", row, col, data[row][col])
 		}
 	}
 
 	return &result
 }
 
-// Get gets the value on the specified x,y position
-func (m Matrix) Get(x int, y int) float64 {
-	return m.data[y*m.size+x]
+// Get gets the value on the specified position
+func (m Matrix) Get(row int, col int) float64 {
+	return m.data[row*m.size+col]
+}
+
+// Set sets the value on the specified position
+func (m Matrix) Set(row int, col int, v float64) {
+	m.data[row*m.size+col] = v
 }
 
 // Equals checks if the Matrix is equal to another Matrix
@@ -46,4 +52,35 @@ func (m Matrix)Equals(other Matrix) bool {
 		}
 	}
 	return true
+}
+
+// Multiply calculates the product of two matrices
+func (m Matrix)Multiply(other Matrix) *Matrix {
+	p := NewMatrix( [][]float64{})
+	p.size = m.size
+	p.data = make([]float64, m.size*m.size)
+	for row := 0; row < p.size; row++ {
+	  for col := 0; col < p.size; col++ {
+	  	p.Set(row, col, m.rowToTuple(row).Dot(other.columnToTuple(col)))
+	  }
+	}
+	return p
+}
+
+// Multiply calculates the product of two matrices
+func (m Matrix)MultiplyVector(t tuples.Tuple) *tuples.Tuple {
+	p := &tuples.Tuple{}
+	p.X = m.rowToTuple(0).Dot(t)
+	p.Y = m.rowToTuple(1).Dot(t)
+	p.Z = m.rowToTuple(2).Dot(t)
+	p.W = m.rowToTuple(3).Dot(t)
+	return p
+}
+
+func (m Matrix) rowToTuple(row int) tuples.Tuple {
+	return tuples.Tuple{X: m.Get(row, 0), Y: m.Get(row, 1), Z: m.Get(row, 2), W: m.Get(row, 3)}
+}
+
+func (m Matrix) columnToTuple(col int) tuples.Tuple {
+	return tuples.Tuple{X: m.Get(0, col), Y: m.Get(1, col), Z: m.Get(2, col), W: m.Get(3, col)}
 }

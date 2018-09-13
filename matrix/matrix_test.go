@@ -1,6 +1,7 @@
 package matrix
 
 import (
+	"github.com/bas-velthuizen/go-raytracer/tuples"
 	"testing"
 )
 
@@ -152,9 +153,36 @@ func Test_Matrix_Multiplication(t *testing.T) {
 		{ 45, 94, 188, 376 },
 	})
 	// When
-	r := ma.Multiply(mb)
+	r := ma.Multiply(*mb)
 	// Then
-	if !wanted.Equals(r) {
+	if !wanted.Equals(*r) {
 		t.Errorf("%v * %v = %v, wanted %v", ma, mb, r, wanted)
+	}
+}
+
+// Scenario: A matrix multiplied by a tuple
+// Given the following matrix A:
+// | 1 | 2 | 3 | 4 |
+// | 2 | 4 | 4 | 2 |
+// | 8 | 6 | 4 | 1 |
+// | 0 | 0 | 0 | 1 |
+// And b ← tuple(1, 2, 3, 1)
+// Then A * b = tuple(18, 24, 33, 1)
+func Test_Matrix_Multiplied_by_Tuple(t *testing.T) {
+	// Given
+	a := NewMatrix([][]float64{
+		{ 1, 2, 3, 4 },
+		{ 2, 4, 4, 2 },
+		{ 8, 6, 4, 1 },
+		{ 0, 0, 0, 1 },
+	})
+	b := tuples.Tuple{X:1, Y:2, Z:3, W:1}
+	// Expected
+	wanted := tuples.Tuple{X:18, Y:24, Z:33, W:1}
+	// When
+	r := a.MultiplyVector(b)
+	// Then
+	if !wanted.Equals(*r) {
+		t.Errorf("%v * %v = %v, wanted %v", a, b, r, wanted)
 	}
 }
