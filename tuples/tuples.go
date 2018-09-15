@@ -1,6 +1,9 @@
 package tuples
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
 
 const epsilon = 1e-5
 
@@ -10,6 +13,14 @@ type Tuple struct {
 	Y float64
 	Z float64
 	W float64
+}
+
+func (t Tuple) String() string {
+	r := fmt.Sprintf("{ %9.5f", t.X)
+	r += fmt.Sprintf(", %9.5f", t.Y)
+	r += fmt.Sprintf(", %9.5f", t.Z)
+	r += fmt.Sprintf(", %9.5f }", t.W)
+	return r
 }
 
 // IsPoint checks if the Tuple is a Point

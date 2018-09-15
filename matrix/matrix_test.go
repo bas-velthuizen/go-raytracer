@@ -1,8 +1,9 @@
 package matrix
 
 import (
-	"github.com/bas-velthuizen/go-raytracer/tuples"
 	"testing"
+
+	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
 // Scenario: Constructing and inspecting a 4x4 matrix
@@ -134,23 +135,23 @@ func Test_3x3_Matrix(t *testing.T) {
 func Test_Matrix_Multiplication(t *testing.T) {
 	// Given
 	ma := NewMatrix([][]float64{
-		{ 1, 2, 3, 4 },
-		{ 2, 3, 4, 5 },
-		{ 3, 4, 5, 6 },
-		{ 4, 5, 6, 7 },
+		{1, 2, 3, 4},
+		{2, 3, 4, 5},
+		{3, 4, 5, 6},
+		{4, 5, 6, 7},
 	})
 	mb := NewMatrix([][]float64{
-		{ 0, 1, 2, 4 },
-		{ 1, 2, 4, 8 },
-		{ 2, 4, 8, 16 },
-		{ 4, 8, 16, 32 },
+		{0, 1, 2, 4},
+		{1, 2, 4, 8},
+		{2, 4, 8, 16},
+		{4, 8, 16, 32},
 	})
 	// Expected
 	wanted := NewMatrix([][]float64{
-		{ 24, 49, 98, 196 },
-		{ 31, 64, 128, 256 },
-		{ 38, 79, 158, 316 },
-		{ 45, 94, 188, 376 },
+		{24, 49, 98, 196},
+		{31, 64, 128, 256},
+		{38, 79, 158, 316},
+		{45, 94, 188, 376},
 	})
 	// When
 	r := ma.Multiply(*mb)
@@ -171,18 +172,55 @@ func Test_Matrix_Multiplication(t *testing.T) {
 func Test_Matrix_Multiplied_by_Tuple(t *testing.T) {
 	// Given
 	a := NewMatrix([][]float64{
-		{ 1, 2, 3, 4 },
-		{ 2, 4, 4, 2 },
-		{ 8, 6, 4, 1 },
-		{ 0, 0, 0, 1 },
+		{1, 2, 3, 4},
+		{2, 4, 4, 2},
+		{8, 6, 4, 1},
+		{0, 0, 0, 1},
 	})
-	b := tuples.Tuple{X:1, Y:2, Z:3, W:1}
+	b := tuples.Tuple{X: 1, Y: 2, Z: 3, W: 1}
 	// Expected
-	wanted := tuples.Tuple{X:18, Y:24, Z:33, W:1}
+	wanted := tuples.Tuple{X: 18, Y: 24, Z: 33, W: 1}
 	// When
 	r := a.MultiplyVector(b)
 	// Then
 	if !wanted.Equals(*r) {
 		t.Errorf("%v * %v = %v, wanted %v", a, b, r, wanted)
+	}
+}
+
+// Scenario: Multiplying a matrix by the identity
+// Given the following matrix A:
+// | 0 | 1 |  2 |  4 |
+// | 1 | 2 |  4 |  8 |
+// | 2 | 4 |  8 | 16 |
+// | 4 | 8 | 16 | 32 |
+// Then A * identity_matrix = A
+func Test_Multiplying_a_Matrix_by_Identity(t *testing.T) {
+	// Given
+	a := NewMatrix([][]float64{
+		{0, 1, 2, 4},
+		{1, 2, 4, 8},
+		{2, 4, 8, 16},
+		{4, 8, 16, 32},
+	})
+	// When
+	m := a.Multiply(*Identity(4))
+	// Then
+	if !m.Equals(*a) {
+		t.Errorf("%v * I = %v, wanted %v", a, m, a)
+	}
+}
+
+// Scenario: Multiplying identity by a tuple
+// Given a ← tuple(1, 2, 3, 4)
+// Then identity_matrix * a = a
+func Test_Multiplying_Identity_by_a_Tuple(t *testing.T) {
+	// Given
+	a := tuples.Tuple{X: 1, Y: 2, Z: 3, W: 4}
+	// When
+	m := Identity(4).MultiplyVector(a)
+	// Then
+	if !m.Equals(a) {
+		t.Errorf("I * %v = %v, wanted %v", a, m, a)
 	}
 }
