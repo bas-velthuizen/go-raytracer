@@ -2,9 +2,8 @@ package matrix
 
 import (
 	"fmt"
-	"log"
-
 	"github.com/bas-velthuizen/go-raytracer/tuples"
+	"log"
 )
 
 // Matrix is a two dimensional array
@@ -119,6 +118,19 @@ func (m Matrix) MultiplyVector(t tuples.Tuple) *tuples.Tuple {
 	return p
 }
 
+// Transpose transposes a Matrix, ie. mirrors it along the r=c diagonal
+func (m Matrix) Transpose() *Matrix {
+	t := NewMatrix([][]float64{})
+	t.size = m.size
+	t.data = make([]float64, len(m.data))
+	for row := 0; row < t.size; row++ {
+		for col := 0; col < t.size; col++ {
+			t.Set(row, col, m.Get(col, row))
+		}
+	}
+	return t
+}
+
 func (m Matrix) rowToTuple(row int) tuples.Tuple {
 	return tuples.Tuple{X: m.Get(row, 0), Y: m.Get(row, 1), Z: m.Get(row, 2), W: m.Get(row, 3)}
 }
@@ -126,3 +138,4 @@ func (m Matrix) rowToTuple(row int) tuples.Tuple {
 func (m Matrix) columnToTuple(col int) tuples.Tuple {
 	return tuples.Tuple{X: m.Get(0, col), Y: m.Get(1, col), Z: m.Get(2, col), W: m.Get(3, col)}
 }
+

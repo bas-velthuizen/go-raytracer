@@ -224,3 +224,53 @@ func Test_Multiplying_Identity_by_a_Tuple(t *testing.T) {
 		t.Errorf("I * %v = %v, wanted %v", a, m, a)
 	}
 }
+
+// Scenario: Transposing a matrix
+// Given the following matrix A:
+// | 0 | 9 | 3 | 0 |
+// | 9 | 8 | 0 | 8 |
+// | 1 | 8 | 5 | 3 |
+// | 0 | 0 | 5 | 8 |
+// Then transpose(A) is the following matrix:
+// | 0 | 9 | 1 | 0 |
+// | 9 | 8 | 8 | 0 |
+// | 3 | 0 | 5 | 5 |
+// | 0 | 8 | 3 | 8 |
+func Test_Transposing_a_Matrix(t *testing.T) {
+	// Given
+	a := NewMatrix([][]float64{
+		{0, 9, 3, 0},
+		{9, 8, 0, 8},
+		{1, 8, 5, 3},
+		{0, 0, 5, 8},
+	})
+	// Expected
+	wanted := NewMatrix([][]float64{
+		{ 0, 9, 1, 0 },
+		{ 9, 8, 8, 0 },
+		{ 3, 0, 5, 5 },
+		{ 0, 8, 3, 8 },
+	})
+	// When
+	transposed := a.Transpose()
+	// Then
+	if !wanted.Equals(*transposed) {
+		t.Errorf("Transpose( %v ) = %v, wanted %v", a, transposed, wanted)
+	}
+}
+
+//Scenario: Transposing the identity matrix
+//Given A ← transpose(identity_matrix)
+//Then A = identity_matrix
+func Test_Transposing_Identity_gives_Identity(t *testing.T) {
+	// Given
+	id := Identity(4)
+	// Expected
+	wanted := Identity(4)
+	// When
+	transposed := id.Transpose()
+	// Then
+	if !wanted.Equals(*transposed) {
+		t.Errorf("Transpose( %v ) = %v, wanted %v", id, transposed, wanted)
+	}
+}
