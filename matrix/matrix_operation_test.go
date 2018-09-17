@@ -117,3 +117,41 @@ func Test_Calculate_Minor_of_3x3_Matrix(t *testing.T) {
 		t.Errorf("Minor( %v, 1, 0 ) == %f, wanted %f", a, ma, wanted)
 	}
 }
+
+// Scenario: Calculating a cofactor of a 3x3 matrix
+// Given the following 3x3 matrix A:
+// | 3 |  5 |  0 |
+// | 2 | -1 | -7 |
+// | 6 | -1 |  5 |
+// Then minor(A, 0, 0) = -12
+// And cofactor(A, 0, 0) = -12
+// And minor(A, 1, 0) = 25
+// And cofactor(A, 1, 0) = -25
+func Test_Calculate_a_Cofactor_of_a_3x3_Matrix(t *testing.T) {
+	// When
+	a := NewMatrix([][]float64{
+		{3, 5, 0},
+		{2, -1, -7},
+		{6, -1, 5},
+	})
+	// Then
+	ma := a.Minor(0, 0)
+	if ma != -12.0 {
+		t.Errorf("Minor( %v, 0, 0 ) = %f, wanted %f", a, ma, -12.0)
+	}
+	// And
+	ca := a.Cofactor(0, 0)
+	if ca != -12.0 {
+		t.Errorf("Cofactor( %v, 0, 0 ) = %f, wanted %f", a, ca, -12.0)
+	}
+	// And
+	mb := a.Minor(1, 0)
+	if mb != 25.0 {
+		t.Errorf("Minor( %v, 1, 0 ) = %f, wanted %f", a, mb, 25.0)
+	}
+	// And
+	cb := a.Cofactor(1, 0)
+	if cb != -25.0 {
+		t.Errorf("Cofactor( %v, 1, 0 ) = %f, wanted %f", a, cb, -25.0)
+	}
+}

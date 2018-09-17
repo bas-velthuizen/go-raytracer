@@ -171,6 +171,16 @@ func (m Matrix) Minor(row int, col int) float64 {
 	return sub.Determinant()
 }
 
+// Cofactor calculates the specified cofactor of a Matrix
+// which means the sign-corrected determinant of the specified submatrix
+func (m Matrix) Cofactor(row int, col int) float64 {
+	sub := m.Submatrix(row, col)
+	if (row+col)%2 == 1 {
+		return -sub.Determinant()
+	}
+	return sub.Determinant()
+}
+
 func (m Matrix) rowToTuple(row int) tuples.Tuple {
 	return tuples.Tuple{X: m.Get(row, 0), Y: m.Get(row, 1), Z: m.Get(row, 2), W: m.Get(row, 3)}
 }
