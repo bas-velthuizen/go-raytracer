@@ -86,3 +86,34 @@ func Test_Submatrix_of_4x4_Matrix_is_3x3_Matrix(t *testing.T) {
 		t.Errorf("submatrix(%v, 0, 2) = %v, wanted %v", a, sub, wanted)
 	}
 }
+
+// Scenario: Calculating a minor of a 3x3 matrix
+// Given the following 3x3 matrix A:
+// | 3 |  5 |  0 |
+// | 2 | -1 | -7 |
+// | 6 | -1 |  5 |
+// And B ← submatrix(A, 1, 0)
+// Then determinant(B) = 25
+// And minor(A, 1, 0) = 25
+func Test_Calculate_Minor_of_3x3_Matrix(t *testing.T) {
+	// Given
+	a := NewMatrix([][]float64{
+		{3, 5, 0},
+		{2, -1, -7},
+		{6, -1, 5},
+	})
+	// Expected
+	wanted := 25.0
+	// When
+	b := a.Submatrix(1, 0)
+	// Then
+	bd := b.Determinant()
+	if bd != wanted {
+		t.Errorf("Determinant( %v ) == %f, wanted %f", b, bd, wanted)
+	}
+	// And
+	ma := a.Minor(1, 0)
+	if ma != wanted {
+		t.Errorf("Minor( %v, 1, 0 ) == %f, wanted %f", a, ma, wanted)
+	}
+}

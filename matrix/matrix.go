@@ -164,6 +164,13 @@ func (m Matrix) Submatrix(row int, col int) *Matrix {
 	return sub
 }
 
+// Minor calculates the specified minor of a Matrix
+// which means the determinant of the specified submatrix
+func (m Matrix) Minor(row int, col int) float64 {
+	sub := m.Submatrix(row, col)
+	return sub.Determinant()
+}
+
 func (m Matrix) rowToTuple(row int) tuples.Tuple {
 	return tuples.Tuple{X: m.Get(row, 0), Y: m.Get(row, 1), Z: m.Get(row, 2), W: m.Get(row, 3)}
 }
