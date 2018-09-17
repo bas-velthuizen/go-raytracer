@@ -2,9 +2,10 @@ package matrix
 
 import (
 	"fmt"
-	"github.com/bas-velthuizen/go-raytracer/tuples"
 	"log"
 	"math"
+
+	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
 // Matrix is a two dimensional array
@@ -88,7 +89,7 @@ func (m Matrix) Equals(other Matrix) bool {
 	}
 	for row := 0; row < m.size; row++ {
 		for col := 0; col < m.size; col++ {
-			if math.Abs(m.data[row*m.size+col] - other.data[row*m.size+col]) > tuples.Epsilon {
+			if math.Abs(m.data[row*m.size+col]-other.data[row*m.size+col]) > tuples.Epsilon {
 				return false
 			}
 		}
@@ -133,11 +134,36 @@ func (m Matrix) Transpose() *Matrix {
 }
 
 // Determinant calculates the Determinant of a matrix
-func (m Matrix) Determinant() float64  {
-	d := m.Get(0, 0) * m.Get(1, 1) - m.Get( 0, 1) * m.Get(1, 0)
+func (m Matrix) Determinant() float64 {
+	d := m.Get(0, 0)*m.Get(1, 1) - m.Get(0, 1)*m.Get(1, 0)
 	return d
 
 }
+
+// Submatrix returns the specified submatrix of a Matrix
+// it removes the specified row an column
+func (m Matrix) Submatrix(row int, col int) *Matrix {
+	sub := NewMatrix([][]float64{})
+	sub.size = m.size - 1
+	sub.data = make([]float64, (sub.size * sub.size))
+	for srow := 0; srow < m.size; srow++ {
+		trow := srow
+		if trow > row {
+			trow--
+		}
+		for scol := 0; scol < m.size; scol++ {
+			tcol := scol
+			if tcol > col {
+				tcol--
+			}
+			if srow != row && scol != col {
+				sub.Set(trow, tcol, m.Get(srow, scol))
+			}
+		}
+	}
+	return sub
+}
+
 func (m Matrix) rowToTuple(row int) tuples.Tuple {
 	return tuples.Tuple{X: m.Get(row, 0), Y: m.Get(row, 1), Z: m.Get(row, 2), W: m.Get(row, 3)}
 }
@@ -145,4 +171,3 @@ func (m Matrix) rowToTuple(row int) tuples.Tuple {
 func (m Matrix) columnToTuple(col int) tuples.Tuple {
 	return tuples.Tuple{X: m.Get(0, col), Y: m.Get(1, col), Z: m.Get(2, col), W: m.Get(3, col)}
 }
-
