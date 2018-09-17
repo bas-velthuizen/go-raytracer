@@ -5,7 +5,8 @@ import (
 	"math"
 )
 
-const epsilon = 1e-5
+// Epsilon indicates the precision of calculations with Tuples and Matrices
+const Epsilon = 1e-5
 
 // Tuple models a point (w = 1.0) or vector (w = 0.0)
 type Tuple struct {
@@ -35,10 +36,10 @@ func (t Tuple) IsVector() bool {
 
 // Equals checks if two Tuples are equal
 func (t Tuple) Equals(other Tuple) bool {
-	return math.Abs(t.X-other.X) < epsilon &&
-		math.Abs(t.Y-other.Y) < epsilon &&
-		math.Abs(t.Z-other.Z) < epsilon &&
-		math.Abs(t.W-other.W) < epsilon
+	return math.Abs(t.X-other.X) < Epsilon &&
+		math.Abs(t.Y-other.Y) < Epsilon &&
+		math.Abs(t.Z-other.Z) < Epsilon &&
+		math.Abs(t.W-other.W) < Epsilon
 }
 
 // Add adds a Tuple to the current Tuple

@@ -1,8 +1,11 @@
 package colors
 
-import "math"
+import (
+	"github.com/bas-velthuizen/go-raytracer/tuples"
+	"math"
+)
 
-const epsilon = 1e-5
+const epsilon = tuples.Epsilon
 
 type Color struct {
 	Red float64

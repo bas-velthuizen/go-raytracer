@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
 	"log"
+	"math"
 )
 
 // Matrix is a two dimensional array
@@ -87,7 +88,7 @@ func (m Matrix) Equals(other Matrix) bool {
 	}
 	for row := 0; row < m.size; row++ {
 		for col := 0; col < m.size; col++ {
-			if m.data[row*m.size+col] != other.data[row*m.size+col] {
+			if math.Abs(m.data[row*m.size+col] - other.data[row*m.size+col]) > tuples.Epsilon {
 				return false
 			}
 		}
@@ -131,6 +132,12 @@ func (m Matrix) Transpose() *Matrix {
 	return t
 }
 
+// Determinant calculates the Determinant of a matrix
+func (m Matrix) Determinant() float64  {
+	d := m.Get(0, 0) * m.Get(1, 1) - m.Get( 0, 1) * m.Get(1, 0)
+	return d
+
+}
 func (m Matrix) rowToTuple(row int) tuples.Tuple {
 	return tuples.Tuple{X: m.Get(row, 0), Y: m.Get(row, 1), Z: m.Get(row, 2), W: m.Get(row, 3)}
 }
