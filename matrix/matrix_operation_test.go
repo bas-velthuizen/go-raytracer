@@ -155,3 +155,60 @@ func Test_Calculate_a_Cofactor_of_a_3x3_Matrix(t *testing.T) {
 		t.Errorf("Cofactor( %v, 1, 0 ) = %f, wanted %f", a, cb, -25.0)
 	}
 }
+
+// Scenario: Calculating the determinant of a 3x3 matrix
+// Given the following 3x3 matrix A:
+// |  1 | 2 |  6 |
+// | -5 | 8 | -4 |
+// |  2 | 6 |  4 |
+// Then cofactor(A, 0, 0) = 56
+// And cofactor(A, 0, 1) = 12
+// And cofactor(A, 0, 2) = -46
+// And determinant(A) = -196
+func Test_Calculate_Determinant_of_3x3_Matrix(t *testing.T) {
+	// Given
+	a:= NewMatrix([][]float64{
+		{  1, 2,  6},
+		{ -5, 8, -4},
+		{  2, 6,  4},
+	})
+	// Expected
+	wantedCf1 := 56.0
+	wantedCf2 := 12.0
+	wantedCf3 := -46.0
+	wantedD := -196.0
+	// Then
+	cf1 := a.Cofactor(0, 0)
+	if wantedCf1 != cf1 {
+		t.Errorf("Cofactor( %v, 0, 0 ) = %9.6f, wanted %9.6f", a, cf1, wantedCf1)
+	}
+	// And
+	cf2 := a.Cofactor(0, 1)
+	if wantedCf2 != cf2 {
+		t.Errorf("Cofactor( %v, 0, 1 ) = %9.6f, wanted %9.6f", a, cf2, wantedCf2)
+	}
+	// And
+	cf3 := a.Cofactor(0, 2)
+	if wantedCf3 != cf3 {
+		t.Errorf("Cofactor( %v, 0, 2 ) = %9.6f, wanted %9.6f", a, cf3, wantedCf3)
+	}
+	// And
+	d := a.Determinant()
+	if wantedD != d {
+		t.Errorf("Determinant( %v ) = %9.6f, wanted %9.6f", a, d, d)
+	}
+}
+// Scenario: Calculating the determinant of a 4x4 matrix
+// Given the following 4x4 matrix A:
+// | -2 | -8 |  3 |  5 |
+// | -3 |  1 |  7 |  3 |
+// |  1 |  2 | -9 |  6 |
+// | -6 |  7 |  7 | -9 |
+// Then cofactor(A, 0, 0) = 690
+// And cofactor(A, 0, 1) = 447
+// And cofactor(A, 0, 2) = 210
+// And cofactor(A, 0, 3) = 51
+// And determinant(A) = -4071
+func Test_Calculate_Determinant_of_4x4_Matrix(t *testing.T) {
+
+}
