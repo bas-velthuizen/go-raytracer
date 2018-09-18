@@ -192,6 +192,11 @@ func (m Matrix) Cofactor(row int, col int) float64 {
 	return sub.Determinant()
 }
 
+// IsInvertible checks if a Matrix is invertible, ie the determinant is not 0
+func (m Matrix) IsInvertible() bool {
+	return m.Determinant() != 0.0
+}
+
 func (m Matrix) rowToTuple(row int) tuples.Tuple {
 	return tuples.Tuple{X: m.Get(row, 0), Y: m.Get(row, 1), Z: m.Get(row, 2), W: m.Get(row, 3)}
 }
