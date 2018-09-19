@@ -445,3 +445,41 @@ func Test_Calculate_the_Inverse_of_a_Third_Matrix(t *testing.T) {
 		t.Errorf("Inverse( %v ) = %v , expected %v", a, b, wanted)
 	}
 }
+
+// Scenario: Multiplying a product by its inverse
+// Given the following 4x4 matrix A:
+// |  3 | -9 |  7 |  3 |
+// |  3 | -8 |  2 | -9 |
+// | -4 |  4 |  4 |  1 |
+// | -6 |  5 | -1 |  1 |
+// And the following 4x4 matrix B:
+// | 8 |  2 | 2 | 2 |
+// | 3 | -1 | 7 | 0 |
+// | 7 |  0 | 5 | 4 |
+// | 6 | -2 | 0 | 5 |
+// And C ← A * B
+// Then C * inverse(B) = A
+func Test_Multiplying_a_Product_by_its_Inverse(t *testing.T) {
+	// Given
+	a := NewMatrix([][]float64{
+		{  3, -9,  7,  3 },
+		{  3, -8,  2, -9 },
+		{ -4,  4,  4,  1 },
+		{ -6,  5, -1,  1 },
+	})
+	b := NewMatrix([][]float64{
+		{ 8,  2, 2, 2 },
+		{ 3, -1, 7, 0 },
+		{ 7,  0, 5, 4 },
+		{ 6, -2, 0, 5 },
+	})
+	// When
+	c := a.Multiply(*b)
+	// And
+	d := c.Multiply(*b.Inverse())
+	// Then
+	if !d.Equals(*a) {
+		t.Errorf("a * b * inverse(b) = %v, wanted %v", d, a)
+	}
+
+}
