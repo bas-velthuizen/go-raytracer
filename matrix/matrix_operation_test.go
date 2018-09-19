@@ -336,5 +336,112 @@ func Test_Calculate_the_Inverse_of_a_Matrix(t *testing.T) {
 	})
 	// When
 	b := a.Inverse()
+	// Expected
+	detA := 532.0
+	cofA23 := -160.0
+	bWanted32 := -160.0/532.0
+	cofA32 := 105.0
+	bWanted23 := 105.0/532.0
+	bWanted := NewMatrix([][]float64{
+		{  0.21805,  0.45113,  0.24060, -0.04511 },
+		{ -0.80827, -1.45677, -0.44361,  0.52068 },
+		{ -0.07895, -0.22368, -0.05263,  0.19737 },
+		{ -0.52256, -0.81391, -0.30075,  0.30639 },
+	})
+	// Then
+	da := a.Determinant()
+	if detA != da {
+		t.Errorf("det( %v ) = %9.6f , expected %9.6f", a, da, detA)
+	}
+	// And
+	ca23 := a.Cofactor(2, 3)
+	if cofA23 != ca23 {
+		t.Errorf("cof( %v, 2, 3 ) = %9.6f , expected %9.6f", a, ca23, cofA23)
+	}
+	// And
+	b32 := b.Get(3, 2)
+	if bWanted32 != b32 {
+		t.Errorf("b[ 3, 2] = %9.6f , expected %9.6f", b32, bWanted32)
+	}
+	// And
+	ca32 := a.Cofactor(3, 2)
+	if cofA32 != ca32 {
+		t.Errorf("cof( %v, 3, 2 ) = %9.6f , expected %9.6f", a, ca32, cofA32)
+	}
+	// And
+	b23 := b.Get(2, 3)
+	if bWanted23 != b23 {
+		t.Errorf("b[ 2, 3] = %9.6f , expected %9.6f", b23, bWanted23)
+	}
+	// And
+	if !bWanted.Equals(*b) {
+		t.Errorf("Inverse( %v ) = %v , expected %v", a, b, bWanted)
+	}
+}
 
+// Scenario: Calculating the inverse of another matrix
+// Given the following 4x4 matrix A:
+// | 8 | -5 | 9 | 2 |
+// | 7 | 5 | 6 | 1 |
+// | -6 | 0 | 9 | 6 |
+// | -3 | 0 | -9 | -4 |
+// Then inverse(A) is the following 4x4 matrix:
+// | -0.15385 | -0.15385 | -0.28205 | -0.53846 |
+// | -0.07692 | 0.12308 | 0.02564 | 0.03077 |
+// | 0.35897 | 0.35897 | 0.43590 | 0.92308 |
+// | -0.69231 | -0.69231 | -0.76923 | -1.92308 |
+func Test_Calculate_the_Inverse_of_Another_Matrix(t *testing.T) {
+	// Given
+	a := NewMatrix([][]float64{
+		{  8 , -5,   9,  2 },
+		{  7 ,  5,   6,  1 },
+		{ -6,   0,   9,  6 },
+		{ -3,   0,  -9, -4 },
+	})
+	// Expected
+	wanted := NewMatrix([][]float64{
+		{ -0.15385, -0.15385, -0.28205, -0.53846 },
+		{ -0.07692,  0.12308,  0.02564,  0.03077 },
+		{  0.35897,  0.35897,  0.43590,  0.92308 },
+		{ -0.69231, -0.69231, -0.76923, -1.92308 },
+	})
+	// When
+	b := a.Inverse()
+	// Then
+	if !wanted.Equals(*b) {
+		t.Errorf("Inverse( %v ) = %v , expected %v", a, b, wanted)
+	}
+}
+// Scenario: Calculating the inverse of a third matrix
+// Given the following 4x4 matrix A:
+// | 9 | 3 | 0 | 9 |
+// | -5 | -2 | -6 | -3 |
+// | -4 | 9 | 6 | 4 |
+// | -7 | 6 | 6 | 2 |
+// Then inverse(A) is the following 4x4 matrix:
+// | -0.04074 | -0.07778 | 0.14444 | -0.22222 |
+// | -0.07778 | 0.03333 | 0.36667 | -0.33333 |
+// | -0.02901 | -0.14630 | -0.10926 | 0.12963 |
+// | 0.17778 | 0.06667 | -0.26667 | 0.33333 |
+func Test_Calculate_the_Inverse_of_a_Third_Matrix(t *testing.T) {
+	// Given
+	a := NewMatrix([][]float64{
+		{  9,  3,  0,  9 },
+		{ -5, -2, -6, -3 },
+		{ -4,  9,  6,  4 },
+		{ -7,  6,  6,  2 },
+	})
+	// Expected
+	wanted := NewMatrix([][]float64{
+		{ -0.04074, -0.07778,  0.14444, -0.22222 },
+		{ -0.07778,  0.03333,  0.36667, -0.33333 },
+		{ -0.02901, -0.14630, -0.10926,  0.12963 },
+		{  0.17778,  0.06667, -0.26667,  0.33333 },
+	})
+	// When
+	b := a.Inverse()
+	// Then
+	if !wanted.Equals(*b) {
+		t.Errorf("Inverse( %v ) = %v , expected %v", a, b, wanted)
+	}
 }

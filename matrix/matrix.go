@@ -197,6 +197,23 @@ func (m Matrix) IsInvertible() bool {
 	return m.Determinant() != 0.0
 }
 
+// Inverse calculates the inverse of a Matrix
+// Create a matrix of the cofactors of m
+// Transpose matrix
+// Divide matrix through Det(m)
+func (m Matrix) Inverse() *Matrix {
+	detM := m.Determinant()
+	i := NewMatrix([][]float64{})
+	i.size = m.size
+	i.data = make([]float64, i.size*i.size)
+	for row := 0; row < m.size; row++ {
+		for col := 0; col < m.size; col++ {
+			i.Set(col, row, m.Cofactor(row, col) / detM )
+		}
+	}
+	return i
+}
+
 func (m Matrix) rowToTuple(row int) tuples.Tuple {
 	return tuples.Tuple{X: m.Get(row, 0), Y: m.Get(row, 1), Z: m.Get(row, 2), W: m.Get(row, 3)}
 }
