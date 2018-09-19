@@ -483,3 +483,74 @@ func Test_Multiplying_a_Product_by_its_Inverse(t *testing.T) {
 	}
 
 }
+
+// Scenario: Inverting the Identity Matrix
+// Given the following 4x4 matrix I:
+// | 1 | 0 | 0 | 0 |
+// | 0 | 1 | 0 | 0 |
+// | 0 | 0 | 1 | 0 |
+// | 0 | 0 | 0 | 1 |
+// Then inverse(I) = I
+func Test_Inverting_the_Identity_Matrix(t *testing.T) {
+	// Given
+	i := Identity(4)
+	// When
+	j := i.Inverse()
+	// Then
+	if !j.Equals(*i) {
+		t.Errorf("i * Inverse i = %v, wanted %v", j, i)
+	}
+}
+
+// Scenario: Multiplying a product by its inverse
+// Given the following 4x4 matrix A:
+// |  3 | -9 |  7 |  3 |
+// |  3 | -8 |  2 | -9 |
+// | -4 |  4 |  4 |  1 |
+// | -6 |  5 | -1 |  1 |
+// And the following 4x4 matrix I:
+// Then A * inverse(A) = I
+func Test_Multiplying_a_Matrix_by_its_Inverse(t *testing.T) {
+	// Given
+	a := NewMatrix([][]float64{
+		{  3, -9,  7,  3 },
+		{  3, -8,  2, -9 },
+		{ -4,  4,  4,  1 },
+		{ -6,  5, -1,  1 },
+	})
+	// Expected
+	i := Identity(4)
+	// When
+	b := a.Multiply(*a.Inverse())
+	// Then
+	if !i.Equals(*b) {
+		t.Errorf("a * inverse(a) = %v, wanted %v", b, i)
+	}
+}
+
+// Scenario: Transposing the Inverse
+// Given the following 4x4 matrix A:
+// |  3 | -9 |  7 |  3 |
+// |  3 | -8 |  2 | -9 |
+// | -4 |  4 |  4 |  1 |
+// | -6 |  5 | -1 |  1 |
+// And B ← Inverse(Transpose(A))
+// And C ← Transpose(Inverse(A))
+// Then B = C
+func Test_Transposing_and_Inverting_a_Matrix(t *testing.T) {
+	// Given
+	a := NewMatrix([][]float64{
+		{  3, -9,  7,  3 },
+		{  3, -8,  2, -9 },
+		{ -4,  4,  4,  1 },
+		{ -6,  5, -1,  1 },
+	})
+	// When
+	b := a.Transpose().Inverse()
+	// And
+	c := a.Inverse().Transpose()
+	// Then
+	if !c.Equals(*b) {
+		t.Errorf("inverse(transpose(a)) = %v , transpose(inverse(a)) = %v, should be equal", b, c)
+	}
+}

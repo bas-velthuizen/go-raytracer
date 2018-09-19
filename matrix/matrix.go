@@ -2,7 +2,6 @@ package matrix
 
 import (
 	"fmt"
-	"log"
 	"math"
 
 	"github.com/bas-velthuizen/go-raytracer/tuples"
@@ -25,7 +24,7 @@ func NewMatrix(data [][]float64) *Matrix {
 	for row := 0; row < size; row++ {
 		for col := 0; col < size; col++ {
 			result.Set(row, col, data[row][col])
-			log.Printf("(%d, %d) = %f", row, col, data[row][col])
+			// log.Printf("(%d, %d) = %f", row, col, data[row][col])
 		}
 	}
 
@@ -145,7 +144,7 @@ func (m Matrix) Determinant() float64 {
 	//fmt.Printf("m.size: %d \n", m.size)
 	d := 0.0
 	for col := 0; col < m.size; col++ {
-		//fmt.Printf("m(0, %d) = %f , cov(m, 1, %d) = %f\n", col, m.Get(0, col), col, m.Cofactor(1, col))
+		// fmt.Printf("m(0, %d) = %f , cov(m, 1, %d) = %f\n", col, m.Get(0, col), col, m.Cofactor(1, col))
 		d += m.Get(0, col) * m.Cofactor(0, col)
 	}
 	return d
