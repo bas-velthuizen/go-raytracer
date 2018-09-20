@@ -155,7 +155,7 @@ func (m Matrix) Determinant() float64 {
 func (m Matrix) Submatrix(row int, col int) *Matrix {
 	sub := NewMatrix([][]float64{})
 	sub.size = m.size - 1
-	sub.data = make([]float64, (sub.size * sub.size))
+	sub.data = make([]float64, sub.size*sub.size)
 	for srow := 0; srow < m.size; srow++ {
 		trow := srow
 		if trow > row {
@@ -207,7 +207,7 @@ func (m Matrix) Inverse() *Matrix {
 	i.data = make([]float64, i.size*i.size)
 	for row := 0; row < m.size; row++ {
 		for col := 0; col < m.size; col++ {
-			i.Set(col, row, m.Cofactor(row, col) / detM )
+			i.Set(col, row, m.Cofactor(row, col)/detM)
 		}
 	}
 	return i
