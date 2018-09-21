@@ -181,7 +181,7 @@ func Test_Matrix_Multiplied_by_Tuple(t *testing.T) {
 	// Expected
 	wanted := tuples.Tuple{X: 18, Y: 24, Z: 33, W: 1}
 	// When
-	r := a.MultiplyVector(b)
+	r := a.MultiplyTuple(b)
 	// Then
 	if !wanted.Equals(*r) {
 		t.Errorf("%v * %v = %v, wanted %v", a, b, r, wanted)
@@ -218,7 +218,7 @@ func Test_Multiplying_Identity_by_a_Tuple(t *testing.T) {
 	// Given
 	a := tuples.Tuple{X: 1, Y: 2, Z: 3, W: 4}
 	// When
-	m := Identity(4).MultiplyVector(a)
+	m := Identity(4).MultiplyTuple(a)
 	// Then
 	if !m.Equals(a) {
 		t.Errorf("I * %v = %v, wanted %v", a, m, a)
@@ -246,10 +246,10 @@ func Test_Transposing_a_Matrix(t *testing.T) {
 	})
 	// Expected
 	wanted := NewMatrix([][]float64{
-		{ 0, 9, 1, 0 },
-		{ 9, 8, 8, 0 },
-		{ 3, 0, 5, 5 },
-		{ 0, 8, 3, 8 },
+		{0, 9, 1, 0},
+		{9, 8, 8, 0},
+		{3, 0, 5, 5},
+		{0, 8, 3, 8},
 	})
 	// When
 	transposed := a.Transpose()

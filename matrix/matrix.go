@@ -110,7 +110,7 @@ func (m Matrix) Multiply(other Matrix) *Matrix {
 }
 
 // Multiply calculates the product of two matrices
-func (m Matrix) MultiplyVector(t tuples.Tuple) *tuples.Tuple {
+func (m Matrix) MultiplyTuple(t tuples.Tuple) *tuples.Tuple {
 	p := &tuples.Tuple{}
 	p.X = m.rowToTuple(0).Dot(t)
 	p.Y = m.rowToTuple(1).Dot(t)
