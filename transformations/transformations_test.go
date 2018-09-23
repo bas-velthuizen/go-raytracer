@@ -206,3 +206,179 @@ func Test_The_Inverse_of_an_X_Rotation_Rotates_in_the_Opposite_Direction(t *test
 		t.Errorf("inv(%v) * %v = %v, expected %v", halfQuarter, p, r, wanted)
 	}
 }
+
+// Scenario: Rotating a point around the y axis
+// Given p ← point(0, 0, 1)
+// And half_quarter ← rotation_y(π / 4)
+// And full_quarter ← rotation_y(π / 2)
+// Then half_quarter * p = point(√2/2, 0, √2/2)
+// And full_quarter * p = point(1, 0, 0)
+func Test_Rotating_a_Point_Around_the_Y_Axis(t *testing.T) {
+	// Given
+	p := tuples.Point(0, 0, 1)
+	// And
+	halfQuarter := RotationY(math.Pi / 4)
+	// And
+	fullQuarter := RotationY(math.Pi / 2)
+	// Expected
+	wantedHQ := tuples.Point(math.Sqrt2/2, 0, math.Sqrt2/2)
+	wantedFQ := tuples.Point(1, 0, 0)
+	// When
+	hq := halfQuarter.MultiplyTuple(p)
+	fq := fullQuarter.MultiplyTuple(p)
+	// Then
+	if !wantedHQ.Equals(*hq) {
+		t.Errorf("%v * %v = %v, expected %v", halfQuarter, p, hq, wantedHQ)
+	}
+	// And
+	if !wantedFQ.Equals(*fq) {
+		t.Errorf("%v * %v = %v, expected %v", fullQuarter, p, fq, wantedFQ)
+	}
+}
+
+// Scenario: Rotating a point around the z axis
+// Given p ← point(0, 1, 0)
+// And half_quarter ← rotation_z(π / 4)
+// And full_quarter ← rotation_z(π / 2)
+// Then half_quarter * p = point(-√2/2, √2/2, 0)
+// And full_quarter * p = point(-1, 0, 0)
+func Test_Rotating_a_Point_Around_the_Z_Axis(t *testing.T) {
+	// Given
+	p := tuples.Point(0, 1, 0)
+	// And
+	halfQuarter := RotationZ(math.Pi / 4)
+	// And
+	fullQuarter := RotationZ(math.Pi / 2)
+	// Expected
+	wantedHQ := tuples.Point(-math.Sqrt2/2, math.Sqrt2/2, 0)
+	wantedFQ := tuples.Point(-1, 0, 0)
+	// When
+	hq := halfQuarter.MultiplyTuple(p)
+	fq := fullQuarter.MultiplyTuple(p)
+	// Then
+	if !wantedHQ.Equals(*hq) {
+		t.Errorf("%v * %v = %v, expected %v", halfQuarter, p, hq, wantedHQ)
+	}
+	// And
+	if !wantedFQ.Equals(*fq) {
+		t.Errorf("%v * %v = %v, expected %v", fullQuarter, p, fq, wantedFQ)
+	}
+}
+
+//
+// Shearing
+//
+
+// Scenario: Shearing transformation moves x in proportion to y
+// Given transform ← shearing(1, 0, 0, 0, 0, 0)
+// And p ← point(2, 3, 4)
+// Then transform * p = point(5, 3, 4)
+func Test_Shearing_Transformation_Moves_X_in_Proportion_to_Y(t *testing.T) {
+	// Given
+	transform := Shearing(1, 0, 0, 0, 0, 0)
+	// And
+	p := tuples.Point(2, 3, 4)
+	// Expected
+	wanted := tuples.Point(5, 3, 4)
+	// When
+	r := transform.MultiplyTuple(p)
+	// Then
+	if !wanted.Equals(*r) {
+		t.Errorf("%v * %v = %v, expected %v", transform, p, r, wanted)
+	}
+}
+
+// Scenario: Shearing transformation moves x in proportion to z
+// Given transform ← shearing(0, 1, 0, 0, 0, 0)
+// And p ← point(2, 3, 4)
+// Then transform * p = point(6, 3, 4)
+func Test_Shearing_Transformation_Moves_X_in_Proportion_to_Z(t *testing.T) {
+	// Given
+	transform := Shearing(0, 1, 0, 0, 0, 0)
+	// And
+	p := tuples.Point(2, 3, 4)
+	// Expected
+	wanted := tuples.Point(6, 3, 4)
+	// When
+	r := transform.MultiplyTuple(p)
+	// Then
+	if !wanted.Equals(*r) {
+		t.Errorf("%v * %v = %v, expected %v", transform, p, r, wanted)
+	}
+}
+
+// Scenario: Shearing transformation moves y in proportion to x
+// Given transform ← shearing(0, 0, 1, 0, 0, 0)
+// And p ← point(2, 3, 4)
+// Then transform * p = point(2, 5, 4)
+func Test_Shearing_Transformation_Moves_Y_in_Proportion_to_X(t *testing.T) {
+	// Given
+	transform := Shearing(0, 0, 1, 0, 0, 0)
+	// And
+	p := tuples.Point(2, 3, 4)
+	// Expected
+	wanted := tuples.Point(2, 5, 4)
+	// When
+	r := transform.MultiplyTuple(p)
+	// Then
+	if !wanted.Equals(*r) {
+		t.Errorf("%v * %v = %v, expected %v", transform, p, r, wanted)
+	}
+}
+
+// Scenario: Shearing transformation moves y in proportion to z
+// Given transform ← shearing(0, 0, 0, 1, 0, 0)
+// And p ← point(2, 3, 4)
+// Then transform * p = point(2, 7, 4)
+func Test_Shearing_Transformation_Moves_Y_in_Proportion_to_Z(t *testing.T) {
+	// Given
+	transform := Shearing(0, 0, 0, 1, 0, 0)
+	// And
+	p := tuples.Point(2, 3, 4)
+	// Expected
+	wanted := tuples.Point(2, 7, 4)
+	// When
+	r := transform.MultiplyTuple(p)
+	// Then
+	if !wanted.Equals(*r) {
+		t.Errorf("%v * %v = %v, expected %v", transform, p, r, wanted)
+	}
+}
+
+// Scenario: Shearing transformation moves z in proportion to x
+// Given transform ← shearing(0, 0, 0, 0, 1, 0)
+// And p ← point(2, 3, 4)
+// Then transform * p = point(2, 3, 6)
+func Test_Shearing_Transformation_Moves_Z_in_Proportion_to_X(t *testing.T) {
+	// Given
+	transform := Shearing(0, 0, 0, 0, 1, 0)
+	// And
+	p := tuples.Point(2, 3, 4)
+	// Expected
+	wanted := tuples.Point(2, 3, 6)
+	// When
+	r := transform.MultiplyTuple(p)
+	// Then
+	if !wanted.Equals(*r) {
+		t.Errorf("%v * %v = %v, expected %v", transform, p, r, wanted)
+	}
+}
+
+// Scenario: Shearing transformation moves z in proportion to y
+// Given transform ← shearing(0, 0, 0, 0, 0, 1)
+// And p ← point(2, 3, 4)
+// Then transform * p = point(2, 3, 7)
+func Test_Shearing_Transformation_Moves_Z_in_Proportion_to_Y(t *testing.T) {
+	// Given
+	transform := Shearing(0, 0, 0, 0, 0, 1)
+	// And
+	p := tuples.Point(2, 3, 4)
+	// Expected
+	wanted := tuples.Point(2, 3, 7)
+	// When
+	r := transform.MultiplyTuple(p)
+	// Then
+	if !wanted.Equals(*r) {
+		t.Errorf("%v * %v = %v, expected %v", transform, p, r, wanted)
+	}
+}
