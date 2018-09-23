@@ -382,3 +382,79 @@ func Test_Shearing_Transformation_Moves_Z_in_Proportion_to_Y(t *testing.T) {
 		t.Errorf("%v * %v = %v, expected %v", transform, p, r, wanted)
 	}
 }
+
+//
+// Combining Transformations
+//
+
+// Scenario: Individual transformations are applied in sequence
+// Given p ← point(1, 0, 1)
+// And A ← rotation_x(π / 2)
+// And B ← scaling(5, 5, 5)
+// And C ← translation(10, 5, 7)
+// 	# apply rotation first
+// Whenp2 ← A*p
+// Then p2 = point(1, -1, 0)
+// 	# then apply scaling Whenp3 ← B*p2
+// Then p3 = point(5, -5, 0)
+// 	# then apply translation Whenp4 ← C*p3
+// Then p4 = point(15, 0, 7)
+func Test_Individual_Transforms_Are_Applied_In_Sequence(t *testing.T) {
+	// Given
+	p := tuples.Point(1, 0, 1)
+	// And
+	A := RotationX(math.Pi / 2)
+	// And
+	B := Scaling(5, 5, 5)
+	// And
+	C := Translation(10, 5, 7)
+	// Expected
+	wantedA := tuples.Point(1, -1, 0)
+	wantedB := tuples.Point(5, -5, 0)
+	wantedC := tuples.Point(15, 0, 7)
+	// When
+	p2 := A.MultiplyTuple(p)
+	// Then
+	if !wantedA.Equals(*p2) {
+		t.Errorf("%v * %v = %v, expected %v", A, p, p2, wantedA)
+	}
+	// And when
+	p3 := B.MultiplyTuple(*p2)
+	// Then
+	if !wantedB.Equals(*p3) {
+		t.Errorf("%v * %v = %v, expected %v", B, p2, p3, wantedB)
+	}
+	// And when
+	p4 := C.MultiplyTuple(*p3)
+	// Then
+	if !wantedC.Equals(*p4) {
+		t.Errorf("%v * %v = %v, expected %v", B, p3, p4, wantedC)
+	}
+}
+
+// Scenario: Chained transformations must be applied in reverse order
+// Given p ← point(1, 0, 1)
+// And A ← rotation_x(π / 2)
+// And B ← scaling(5, 5, 5)
+// And C ← translation(10, 5, 7)
+// WhenT ← C*B*A
+// Then T * p = point(15, 0, 7)
+func Test_Chained_Transforms_Must_Be_Applied_In_Reverse_Order(t *testing.T) {
+	// Given
+	p := tuples.Point(1, 0, 1)
+	// And
+	A := RotationX(math.Pi / 2)
+	// And
+	B := Scaling(5, 5, 5)
+	// And
+	C := Translation(10, 5, 7)
+	// Expected
+	wanted := tuples.Point(15, 0, 7)
+	// When
+	transform := C.Multiply(*B).Multiply(*A)
+	p2 := transform.MultiplyTuple(p)
+	// Then
+	if !wanted.Equals(*p2) {
+		t.Errorf("(%v * %v * %v ) * %v = %v, expected %v", C, B, A, p, p2, wanted)
+	}
+}
