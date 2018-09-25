@@ -51,6 +51,7 @@ func Identity(size int) *Matrix {
 	return &i
 }
 
+// String formats the Matrix as a string
 func (m Matrix) String() string {
 	r := "{ "
 	for row := 0; row < m.size; row++ {
