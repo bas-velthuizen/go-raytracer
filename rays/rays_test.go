@@ -1,8 +1,9 @@
 package rays
 
 import (
-	"github.com/bas-velthuizen/go-raytracer/tuples"
 	"testing"
+
+	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
 // Scenario: Creating and querying a ray
@@ -17,7 +18,7 @@ func Test_Creating_and_Querying_a_Ray(t *testing.T) {
 	// And
 	direction := tuples.Vector(4, 5, 6)
 	// When
-	r := Ray(origin, direction)
+	r := NewRay(origin, direction)
 	// Then
 	if !origin.Equals(r.origin) {
 		t.Errorf("Origin of %v is %v, wanted %v", r, r.origin, origin)
@@ -36,7 +37,7 @@ func Test_Creating_and_Querying_a_Ray(t *testing.T) {
 // And position(r, 2.5) = point(4.5, 3, 4)
 func Test_Computing_a_Point_from_a_Distance(t *testing.T) {
 	// Given
-	r := Ray(tuples.Point(2, 3, 4), tuples.Vector(1, 0, 0))
+	r := NewRay(tuples.Point(2, 3, 4), tuples.Vector(1, 0, 0))
 	// Expected
 	wanted0 := tuples.Point(2, 3, 4)
 	wanted1 := tuples.Point(3, 3, 4)
@@ -61,5 +62,153 @@ func Test_Computing_a_Point_from_a_Distance(t *testing.T) {
 	p2Dot5 := r.Position(2.5)
 	if !wanted2Dot5.Equals(*p2Dot5) {
 		t.Errorf("position( %v, %f ) = %v, wanted %v", r, 2.5, p2Dot5, wanted2Dot5)
+	}
+}
+
+// Scenario: A ray intersects a sphere at two points
+// Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
+// And s ← sphere()
+// When xs ← intersect(s, r)
+// Then xs.count = 2
+// And xs[0] = 4
+// And xs[1] = 6
+func Test_a_Ray_Intersects_a_Sphere_at_Two_Points(t *testing.T) {
+	// Given
+	r := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
+	// And
+	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	// Expected
+	wantedCount := 2
+	wanted0 := 4.0
+	wanted1 := 6.0
+	// When
+	xs := r.Intersect(*s)
+	// Then
+	if wantedCount != len(xs) {
+		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
+	}
+	// And
+	if wanted0 != xs[0] {
+		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
+	}
+	// And
+	if wanted1 != xs[1] {
+		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
+	}
+}
+
+// Scenario: A ray intersects a sphere at a tangent
+// Given r ← ray(point(0, 1, -5), vector(0, 0, 1))
+// And s ← sphere()
+// When xs ← intersect(s, r)
+// Then xs.count = 2
+// And xs[0] = 5
+// And xs[1] = 5
+func Test_a_Ray_Intersects_a_Sphere_at_a_Tangent(t *testing.T) {
+	// Given
+	r := NewRay(tuples.Point(0, 1, -5), tuples.Vector(0, 0, 1))
+	// And
+	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	// Expected
+	wantedCount := 2
+	wanted0 := 5.0
+	wanted1 := 5.0
+	// When
+	xs := r.Intersect(*s)
+	// Then
+	if wantedCount != len(xs) {
+		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
+	}
+	// And
+	if wanted0 != xs[0] {
+		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
+	}
+	// And
+	if wanted1 != xs[1] {
+		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
+	}
+}
+
+// Scenario: A ray misses a sphere
+// Given r ← ray(point(0, 2, -5), vector(0, 0, 1))
+// And s ← sphere()
+// When xs ← intersect(s, r)
+// Then xs.count = 0
+func Test_a_Ray_Misses_a_Sphere(t *testing.T) {
+	// Given
+	r := NewRay(tuples.Point(0, 2, -5), tuples.Vector(0, 0, 1))
+	// And
+	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	// Expected
+	wantedCount := 0
+	// When
+	xs := r.Intersect(*s)
+	// Then
+	if wantedCount != len(xs) {
+		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
+	}
+}
+
+// Scenario: A ray originates inside a sphere
+// Given r ← ray(point(0, 0, 0), vector(0, 0, 1))
+// And s ← sphere()
+// When xs ← intersect(s, r)
+// Then xs.count = 2
+// And xs[0] = -1
+// And xs[1] = 1
+func Test_a_Ray_Originates_Inside_a_Sphere(t *testing.T) {
+	// Given
+	r := NewRay(tuples.Point(0, 0, 0), tuples.Vector(0, 0, 1))
+	// And
+	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	// Expected
+	wantedCount := 2
+	wanted0 := -1.0
+	wanted1 := 1.0
+	// When
+	xs := r.Intersect(*s)
+	// Then
+	if wantedCount != len(xs) {
+		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
+	}
+	// And
+	if wanted0 != xs[0] {
+		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
+	}
+	// And
+	if wanted1 != xs[1] {
+		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
+	}
+}
+
+// Scenario: A sphere is behind a ray
+// Given r ← ray(point(0, 0, 5), vector(0, 0, 1))
+// And s ← sphere()
+// When xs ← intersect(s, r)
+// Then xs.count = 2
+// And xs[0] = -6
+// And xs[1] = -4
+func Test_a_Sphere_is_Behind_a_Ray(t *testing.T) {
+	// Given
+	r := NewRay(tuples.Point(0, 0, 5), tuples.Vector(0, 0, 1))
+	// And
+	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	// Expected
+	wantedCount := 2
+	wanted0 := -6.0
+	wanted1 := -4.0
+	// When
+	xs := r.Intersect(*s)
+	// Then
+	if wantedCount != len(xs) {
+		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
+	}
+	// And
+	if wanted0 != xs[0] {
+		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
+	}
+	// And
+	if wanted1 != xs[1] {
+		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
 	}
 }
