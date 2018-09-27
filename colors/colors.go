@@ -1,6 +1,7 @@
 package colors
 
 import (
+	"fmt"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
 	"math"
 )
@@ -38,4 +39,9 @@ func (c Color) Multiply(factor float64) Color {
 // Blend multiplies a Color with another Color
 func (c Color) Blend(other Color) Color {
 	return Color{c.Red * other.Red, c.Green * other.Green, c.Blue * other.Blue}
+}
+
+// String formats Color to readable string
+func (c Color) String() string {
+	return fmt.Sprintf("Color( %9.5f, %9.5f, %9.5f )", c.Red, c.Green, c.Blue)
 }

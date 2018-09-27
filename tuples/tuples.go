@@ -17,6 +17,12 @@ type Tuple struct {
 }
 
 func (t Tuple) String() string {
+	if t.IsPoint() {
+		return fmt.Sprintf("Point( %9.5f, %9.5f, %9.5f )", t.X, t.Y, t.Z)
+	}
+	if t.IsVector() {
+		return fmt.Sprintf("Vector( %9.5f, %9.5f, %9.5f )", t.X, t.Y, t.Z)
+	}
 	r := fmt.Sprintf("{ %9.5f", t.X)
 	r += fmt.Sprintf(", %9.5f", t.Y)
 	r += fmt.Sprintf(", %9.5f", t.Z)
