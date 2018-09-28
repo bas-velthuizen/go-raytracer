@@ -242,3 +242,105 @@ func Test_Intersects_Sets_the_Object_on_the_Intersection(t *testing.T) {
 		t.Errorf("intersect( %v, %v)[1] strikes %p, expected %p", s, r, xs[1].Object, s)
 	}
 }
+
+// Scenario: The hit, when all intersections have positive t
+// Given s ← sphere()
+// And i1 ← intersection(1, s)
+// And i2 ← intersection(2, s)
+// And xs ← intersections(i2, i1)
+// When h ← hit(xs)
+// Then h = i1
+func Test_The_Hit_When_all_Intersections_Have_Positive_t(t *testing.T) {
+	// Given
+	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	// And
+	i1 := NewIntersection(1.0, s)
+	// And
+	i2 := NewIntersection(2.0, s)
+	// And
+	xs := NewIntersections([]*Intersection{i2, i1})
+	// When
+	h := xs.Hit()
+	// Then
+	if i1 != h {
+		t.Errorf("%v.Hit() = %v Expected %v", xs, h, i1)
+	}
+}
+
+// Scenario: The hit, when some intersections have negative t
+// Given s ← sphere()
+// And i1 ← intersection(-1, s)
+// And i2 ← intersection(1, s)
+// And xs ← intersections(i2, i1)
+// When h ← hit(xs)
+// Then h = i2
+func Test_The_Hit_When_Some_Intersections_Have_Negative_t(t *testing.T) {
+	// Given
+	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	// And
+	i1 := NewIntersection(-1.0, s)
+	// And
+	i2 := NewIntersection(1.0, s)
+	// And
+	xs := NewIntersections([]*Intersection{i2, i1})
+	// When
+	h := xs.Hit()
+	// Then
+	if i2 != h {
+		t.Errorf("%v.Hit() = %v Expected %v", xs, h, i2)
+	}
+}
+
+// Scenario: The hit, when all intersections have negative t
+// Given s ← sphere()
+// And i1 ← intersection(-2, s)
+// And i2 ← intersection(-1, s)
+// And xs ← intersections(i2, i1)
+// When h ← hit(xs)
+// Then h is nothing
+func Test_The_Hit_When_all_Intersections_Have_Negative_t(t *testing.T) {
+	// Given
+	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	// And
+	i1 := NewIntersection(-2.0, s)
+	// And
+	i2 := NewIntersection(-1.0, s)
+	// And
+	xs := NewIntersections([]*Intersection{i2, i1})
+	// When
+	h := xs.Hit()
+	// Then
+	if nil != h {
+		t.Errorf("%v.Hit() = %v Expected %v", xs, h, nil)
+	}
+}
+
+// Scenario: The hit is always the lowest non-negative intersection
+// Given s ← sphere()
+// And i1 ← intersection(5, s)
+// And i2 ← intersection(7, s)
+// And i3 ← intersection(-3, s)
+// And i4 ← intersection(2, s)
+// And xs ← intersections(i1, i2, i3, i4)
+// When h ← hit(xs)
+// Then h = i4
+func Test_The_Hit_is_Always_the_Lowest_NonNegative_Intersections(t *testing.T) {
+	// Given
+	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	// And
+	i1 := NewIntersection(5.0, s)
+	// And
+	i2 := NewIntersection(7.0, s)
+	// And
+	i3 := NewIntersection(-3.0, s)
+	// And
+	i4 := NewIntersection(2.0, s)
+	// And
+	xs := NewIntersections([]*Intersection{i1, i2, i3, i4})
+	// When
+	h := xs.Hit()
+	// Then
+	if i4 != h {
+		t.Errorf("%v.Hit() = %v Expected %v", xs, h, i4)
+	}
+}

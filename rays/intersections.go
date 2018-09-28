@@ -27,3 +27,27 @@ func NewIntersections(is []*Intersection) *Intersections {
 	copy(result, is)
 	return &result
 }
+
+// Hit calculates the hit closest to the view point
+func (xs Intersections) Hit() *Intersection {
+	if len(xs) == 0 {
+		return nil
+	}
+	minIndex := -1
+	for i := 0; i < len(xs); i++ {
+		x := xs[i]
+		if x.Time > 0 {
+			if minIndex < 0 {
+				minIndex = i
+			} else {
+				if xs[minIndex].Time > xs[i].Time {
+					minIndex = i
+				}
+			}
+		}
+	}
+	if minIndex < 0 {
+		return nil
+	}
+	return xs[minIndex]
+}
