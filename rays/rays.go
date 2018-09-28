@@ -30,7 +30,7 @@ func (r Ray) Position(t float64) *tuples.Tuple {
 }
 
 // Intersect calculates the intersections with a Sphere
-func (r Ray) Intersect(s Sphere) []float64 {
+func (r Ray) Intersect(s *Sphere) Intersections {
 	sphereToRay := r.origin.Subtract(s.center)
 
 	a := r.direction.Dot(r.direction)
@@ -40,7 +40,7 @@ func (r Ray) Intersect(s Sphere) []float64 {
 	discriminant := b*b - 4*a*c
 
 	if discriminant < 0.0 {
-		return []float64{}
+		return *NewIntersections([]*Intersection{})
 	}
 
 	t1 := (-b - math.Sqrt(discriminant)) / (2 * a)
@@ -50,5 +50,8 @@ func (r Ray) Intersect(s Sphere) []float64 {
 		t1, t2 = t2, t1
 	}
 
-	return []float64{t1, t2}
+	intersection1 := NewIntersection(t1, s)
+	intersection2 := NewIntersection(t2, s)
+
+	return *NewIntersections([]*Intersection{intersection1, intersection2})
 }

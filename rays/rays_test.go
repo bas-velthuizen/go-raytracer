@@ -82,18 +82,18 @@ func Test_a_Ray_Intersects_a_Sphere_at_Two_Points(t *testing.T) {
 	wanted0 := 4.0
 	wanted1 := 6.0
 	// When
-	xs := r.Intersect(*s)
+	xs := r.Intersect(s)
 	// Then
 	if wantedCount != len(xs) {
 		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
 	}
 	// And
-	if wanted0 != xs[0] {
-		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
+	if wanted0 != (*xs[0]).Time {
+		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0].Time, wanted0)
 	}
 	// And
-	if wanted1 != xs[1] {
-		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
+	if wanted1 != (*xs[1]).Time {
+		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1].Time, wanted1)
 	}
 }
 
@@ -114,17 +114,17 @@ func Test_a_Ray_Intersects_a_Sphere_at_a_Tangent(t *testing.T) {
 	wanted0 := 5.0
 	wanted1 := 5.0
 	// When
-	xs := r.Intersect(*s)
+	xs := r.Intersect(s)
 	// Then
 	if wantedCount != len(xs) {
 		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
 	}
 	// And
-	if wanted0 != xs[0] {
+	if wanted0 != (*xs[0]).Time {
 		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
 	}
 	// And
-	if wanted1 != xs[1] {
+	if wanted1 != (*xs[1]).Time {
 		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
 	}
 }
@@ -142,7 +142,7 @@ func Test_a_Ray_Misses_a_Sphere(t *testing.T) {
 	// Expected
 	wantedCount := 0
 	// When
-	xs := r.Intersect(*s)
+	xs := r.Intersect(s)
 	// Then
 	if wantedCount != len(xs) {
 		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
@@ -166,17 +166,17 @@ func Test_a_Ray_Originates_Inside_a_Sphere(t *testing.T) {
 	wanted0 := -1.0
 	wanted1 := 1.0
 	// When
-	xs := r.Intersect(*s)
+	xs := r.Intersect(s)
 	// Then
 	if wantedCount != len(xs) {
 		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
 	}
 	// And
-	if wanted0 != xs[0] {
+	if wanted0 != (*xs[0]).Time {
 		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
 	}
 	// And
-	if wanted1 != xs[1] {
+	if wanted1 != (*xs[1]).Time {
 		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
 	}
 }
@@ -198,17 +198,47 @@ func Test_a_Sphere_is_Behind_a_Ray(t *testing.T) {
 	wanted0 := -6.0
 	wanted1 := -4.0
 	// When
-	xs := r.Intersect(*s)
+	xs := r.Intersect(s)
 	// Then
 	if wantedCount != len(xs) {
 		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
 	}
 	// And
-	if wanted0 != xs[0] {
+	if wanted0 != (*xs[0]).Time {
 		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
 	}
 	// And
-	if wanted1 != xs[1] {
+	if wanted1 != (*xs[1]).Time {
 		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
+	}
+}
+
+// Scenario: Intersect sets the object on the intersection
+// Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
+// And s ← sphere()
+// When xs ← intersect(s, r)
+// Then xs.count = 2
+// And xs[0].object = s
+// And xs[1].object = s
+func Test_Intersects_Sets_the_Object_on_the_Intersection(t *testing.T) {
+	// Given
+	r := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
+	// And
+	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	// Expected
+	wantedCount := 2
+	// When
+	xs := r.Intersect(s)
+	// Then
+	if wantedCount != len(xs) {
+		t.Errorf("intersect( %v, %v) has %d values, expected %d", s, r, len(xs), wantedCount)
+	}
+	// And
+	if s != (*xs[0]).Object {
+		t.Errorf("intersect( %v, %v)[0] strikes %p, expected %p", s, r, xs[0].Object, s)
+	}
+	// And
+	if s != (*xs[1]).Object {
+		t.Errorf("intersect( %v, %v)[1] strikes %p, expected %p", s, r, xs[1].Object, s)
 	}
 }
