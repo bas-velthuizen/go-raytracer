@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 
+	"github.com/bas-velthuizen/go-raytracer/matrix"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
@@ -54,4 +55,11 @@ func (r Ray) Intersect(s *Sphere) Intersections {
 	intersection2 := NewIntersection(t2, s)
 
 	return *NewIntersections([]*Intersection{intersection1, intersection2})
+}
+
+// Transform transforms a ray with a matrix, returnning a new ray
+func (r Ray) Transform(m matrix.Matrix) *Ray {
+	newOrigin := m.MultiplyTuple(r.origin)
+	newDirection := m.MultiplyTuple(r.direction)
+	return NewRay(*newOrigin, *newDirection)
 }

@@ -48,10 +48,10 @@ func Test_Aggregating_Intersections(t *testing.T) {
 	}
 	// And
 	if 1.0 != (*xs)[0].Time {
-		t.Errorf("xs[0] = %9.6f, expected %9.6f", 1.0, (*xs)[0])
+		t.Errorf("xs[0] = %9.6f, expected %9.6f", 1.0, (*xs)[0].Time)
 	}
 	// And
 	if 2.0 != (*xs)[1].Time {
-		t.Errorf("xs[1] = %9.6f, expected %9.6f", 2.0, (*xs)[1])
+		t.Errorf("xs[1] = %9.6f, expected %9.6f", 2.0, (*xs)[1].Time)
 	}
 }

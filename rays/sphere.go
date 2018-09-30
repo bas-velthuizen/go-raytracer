@@ -2,21 +2,30 @@ package rays
 
 import (
 	"fmt"
+
+	"github.com/bas-velthuizen/go-raytracer/matrix"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
 // Sphere describes a sphere shape
 type Sphere struct {
-	center tuples.Tuple
-	radius float64
+	center    tuples.Tuple
+	radius    float64
+	transform matrix.Matrix
 }
 
 // NewSphere creates a new Sphere instance
 func NewSphere(center tuples.Tuple, radius float64) *Sphere {
-	return &Sphere{center, radius}
+	return &Sphere{center, radius, *matrix.Identity(4)}
 }
 
 // String formats Object to readable string
 func (s Sphere) String() string {
-	return fmt.Sprintf("Sphere( %v, %v )", s.center, s.radius)
+	return fmt.Sprintf("Sphere( %v, %v, %v )", s.center, s.radius, s.transform)
+}
+
+// SetTransform sets the transform value of the sphere
+func (s *Sphere) SetTransform(transform *matrix.Matrix) {
+	s.transform = *transform
+	fmt.Printf("sphere with new transform: %v\n\n", s)
 }

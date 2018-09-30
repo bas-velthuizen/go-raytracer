@@ -3,6 +3,7 @@ package rays
 import (
 	"testing"
 
+	"github.com/bas-velthuizen/go-raytracer/transformations"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
@@ -121,11 +122,11 @@ func Test_a_Ray_Intersects_a_Sphere_at_a_Tangent(t *testing.T) {
 	}
 	// And
 	if wanted0 != (*xs[0]).Time {
-		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
+		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0].Time, wanted0)
 	}
 	// And
 	if wanted1 != (*xs[1]).Time {
-		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
+		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1].Time, wanted1)
 	}
 }
 
@@ -173,11 +174,11 @@ func Test_a_Ray_Originates_Inside_a_Sphere(t *testing.T) {
 	}
 	// And
 	if wanted0 != (*xs[0]).Time {
-		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
+		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0].Time, wanted0)
 	}
 	// And
 	if wanted1 != (*xs[1]).Time {
-		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
+		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1].Time, wanted1)
 	}
 }
 
@@ -205,11 +206,11 @@ func Test_a_Sphere_is_Behind_a_Ray(t *testing.T) {
 	}
 	// And
 	if wanted0 != (*xs[0]).Time {
-		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0], wanted0)
+		t.Errorf("intersect( %v, %v)[0] is %9.6f, expected %9.6f", s, r, xs[0].Time, wanted0)
 	}
 	// And
 	if wanted1 != (*xs[1]).Time {
-		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1], wanted1)
+		t.Errorf("intersect( %v, %v)[1] is %9.6f, expected %9.6f", s, r, xs[1].Time, wanted1)
 	}
 }
 
@@ -342,5 +343,57 @@ func Test_The_Hit_is_Always_the_Lowest_NonNegative_Intersections(t *testing.T) {
 	// Then
 	if i4 != h {
 		t.Errorf("%v.Hit() = %v Expected %v", xs, h, i4)
+	}
+}
+
+// Scenario: Translating a ray
+// Given r ← ray(point(1, 2, 3), vector(0, 1, 0))
+// And m ← translation(3, 4, 5)
+// When r2 ← transform(r, m)
+// Then r2.origin = point(4, 6, 8)
+// And r2.direction = vector(0, 1, 0)
+func Test_Translating_a_Ray(t *testing.T) {
+	// Given
+	r := NewRay(tuples.Point(1, 2, 3), tuples.Vector(0, 1, 0))
+	// And
+	m := transformations.Translation(3, 4, 5)
+	// Whens
+	r2 := r.Transform(*m)
+	// Expected
+	wantedP := tuples.Point(4, 6, 8)
+	wantedD := tuples.Vector(0, 1, 0)
+	// Then
+	if !wantedP.Equals(r2.origin) {
+		t.Errorf("Transform( %v, %v ).origin = %v, wanted %v", r, m, r2.origin, wantedP)
+	}
+	// And
+	if !wantedD.Equals(r2.direction) {
+		t.Errorf("Transform( %v, %v ).direction = %v, wanted %v", r, m, r2.direction, wantedD)
+	}
+}
+
+// Scenario: Scaling a ray
+// Given r ← ray(point(1, 2, 3), vector(0, 1, 0))
+// And m ← scaling(2, 3, 4)
+// When r2 ← transform(r, m)
+// Then r2.origin = point(2, 6, 12)
+// And r2.direction = vector(0, 3, 0)
+func Test_Scaling_a_Ray(t *testing.T) {
+	// Given
+	r := NewRay(tuples.Point(1, 2, 3), tuples.Vector(0, 1, 0))
+	// And
+	m := transformations.Scaling(2, 3, 4)
+	// Whens
+	r2 := r.Transform(*m)
+	// Expected
+	wantedP := tuples.Point(2, 6, 12)
+	wantedD := tuples.Vector(0, 3, 0)
+	// Then
+	if !wantedP.Equals(r2.origin) {
+		t.Errorf("Transform( %v, %v ).origin = %v, wanted %v", r, m, r2.origin, wantedP)
+	}
+	// And
+	if !wantedD.Equals(r2.direction) {
+		t.Errorf("Transform( %v, %v ).direction = %v, wanted %v", r, m, r2.direction, wantedD)
 	}
 }
