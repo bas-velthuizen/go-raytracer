@@ -19,6 +19,12 @@ func NewSphere(center tuples.Tuple, radius float64) *Sphere {
 	return &Sphere{center, radius, *matrix.Identity(4)}
 }
 
+// NewUnitSphere creates a new Sphere instance
+func NewUnitSphere() *Sphere {
+	return NewSphere(tuples.Point(0, 0, 0), 1.0)
+}
+
+
 // String formats Object to readable string
 func (s Sphere) String() string {
 	return fmt.Sprintf("Sphere( %v, %v, %v )", s.center, s.radius, s.transform)

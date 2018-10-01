@@ -77,7 +77,7 @@ func Test_a_Ray_Intersects_a_Sphere_at_Two_Points(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
 	// And
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	// Expected
 	wantedCount := 2
 	wanted0 := 4.0
@@ -109,7 +109,7 @@ func Test_a_Ray_Intersects_a_Sphere_at_a_Tangent(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 1, -5), tuples.Vector(0, 0, 1))
 	// And
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	// Expected
 	wantedCount := 2
 	wanted0 := 5.0
@@ -139,7 +139,7 @@ func Test_a_Ray_Misses_a_Sphere(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 2, -5), tuples.Vector(0, 0, 1))
 	// And
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	// Expected
 	wantedCount := 0
 	// When
@@ -161,7 +161,7 @@ func Test_a_Ray_Originates_Inside_a_Sphere(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 0, 0), tuples.Vector(0, 0, 1))
 	// And
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	// Expected
 	wantedCount := 2
 	wanted0 := -1.0
@@ -193,7 +193,7 @@ func Test_a_Sphere_is_Behind_a_Ray(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 0, 5), tuples.Vector(0, 0, 1))
 	// And
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	// Expected
 	wantedCount := 2
 	wanted0 := -6.0
@@ -225,7 +225,7 @@ func Test_Intersects_Sets_the_Object_on_the_Intersection(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
 	// And
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	// Expected
 	wantedCount := 2
 	// When
@@ -253,7 +253,7 @@ func Test_Intersects_Sets_the_Object_on_the_Intersection(t *testing.T) {
 // Then h = i1
 func Test_The_Hit_When_all_Intersections_Have_Positive_t(t *testing.T) {
 	// Given
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	// And
 	i1 := NewIntersection(1.0, s)
 	// And
@@ -277,7 +277,7 @@ func Test_The_Hit_When_all_Intersections_Have_Positive_t(t *testing.T) {
 // Then h = i2
 func Test_The_Hit_When_Some_Intersections_Have_Negative_t(t *testing.T) {
 	// Given
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	// And
 	i1 := NewIntersection(-1.0, s)
 	// And
@@ -301,7 +301,7 @@ func Test_The_Hit_When_Some_Intersections_Have_Negative_t(t *testing.T) {
 // Then h is nothing
 func Test_The_Hit_When_all_Intersections_Have_Negative_t(t *testing.T) {
 	// Given
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	// And
 	i1 := NewIntersection(-2.0, s)
 	// And
@@ -327,7 +327,7 @@ func Test_The_Hit_When_all_Intersections_Have_Negative_t(t *testing.T) {
 // Then h = i4
 func Test_The_Hit_is_Always_the_Lowest_NonNegative_Intersections(t *testing.T) {
 	// Given
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	// And
 	i1 := NewIntersection(5.0, s)
 	// And

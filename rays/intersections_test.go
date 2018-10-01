@@ -2,8 +2,6 @@ package rays
 
 import (
 	"testing"
-
-	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
 // Scenario: An intersection encapsulates `t` and `object`
@@ -13,7 +11,7 @@ import (
 // And i.object = s
 func Test_an_Intersection_Encapsulates_t_and_Object(t *testing.T) {
 	// Given
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	time := 3.5
 	// When
 	i := NewIntersection(time, s)
@@ -37,7 +35,7 @@ func Test_an_Intersection_Encapsulates_t_and_Object(t *testing.T) {
 // And xs[1].t = 2
 func Test_Aggregating_Intersections(t *testing.T) {
 	// Given
-	s := NewSphere(tuples.Point(0, 0, 0), 1.0)
+	s := NewUnitSphere()
 	i1 := NewIntersection(1.0, s)
 	i2 := NewIntersection(2.0, s)
 	// When
