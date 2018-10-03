@@ -52,7 +52,7 @@ func RotationZ(r float64) *matrix.Matrix {
 	t := matrix.Identity(4)
 	t.Set(0, 0, math.Cos(r))
 	t.Set(0, 1, -math.Sin(r))
-	t.Set(1, 0, -math.Sin(r))
+	t.Set(1, 0, math.Sin(r))
 	t.Set(1, 1, math.Cos(r))
 	return t
 }

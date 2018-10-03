@@ -6,6 +6,7 @@ import (
 	"github.com/bas-velthuizen/go-raytracer/rays"
 	"github.com/bas-velthuizen/go-raytracer/transformations"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
+	"math"
 )
 
 func main() {
@@ -16,12 +17,12 @@ func main() {
 
 	scale := transformations.Scaling(0.5, 1, 1)
 	shear := transformations.Shearing(1, 0, 0, 0, 0, 0)
-	// rot := transformations.RotationZ(-math.Pi / 3.0)
+	rot := transformations.RotationZ(-math.Pi / 4.0)
 	trans := transformations.Translation(0, 0, 2)
 
 	origin := tuples.Point(0, 0, -5)
 	s := rays.NewUnitSphere()
-	s.SetTransform(trans.Multiply(*scale).Multiply(*shear))
+	s.SetTransform(trans.Multiply(*scale).Multiply(*rot).Multiply(*shear))
 	depth := 10.0
 	width := 7.0
 	step := width / float64(c.Width)
