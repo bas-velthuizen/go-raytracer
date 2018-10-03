@@ -1,6 +1,7 @@
 package rays
 
 import (
+	"math"
 	"testing"
 
 	"github.com/bas-velthuizen/go-raytracer/transformations"
@@ -96,5 +97,104 @@ func Test_Intersecting_a_Translated_Sphere_with_a_Ray(t *testing.T) {
 	// Then
 	if wantedCount != len(xs) {
 		t.Errorf("len(%v) = %d, expected %d", xs, len(xs), wantedCount)
+	}
+}
+
+// Scenario: The normal on a sphere at a point on the x axis
+// Given s ← sphere()
+// When n ← normal_at(s, point(1, 0, 0))
+// Then n = vector(1, 0, 0)
+func Test_Normal_of_a_Sphere_at_a_Point_on_the_X_Axis(t *testing.T) {
+	// Given
+	s := NewUnitSphere()
+	// And
+	point := tuples.Point(1, 0, 0)
+	// When
+	n := s.NormalAt(point)
+	// Expected
+	wanted := tuples.Vector(1, 0, 0)
+	// Then
+	if !wanted.Equals(*n) {
+		t.Errorf("normal_at( %v, %v ) = %v , wanted %v", s, point, n, wanted)
+	}
+}
+
+// Scenario: The normal on a sphere at a point on the y axis
+// Given s ← sphere()
+// When n ← normal_at(s, point(0, 1, 0))
+// Then n = vector(0, 1, 0)
+func Test_Normal_of_a_Sphere_at_a_Point_on_the_Y_Axis(t *testing.T) {
+	// Given
+	s := NewUnitSphere()
+	// And
+	point := tuples.Point(0, 1, 0)
+	// When
+	n := s.NormalAt(point)
+	// Expected
+	wanted := tuples.Vector(0, 1, 0)
+	// Then
+	if !wanted.Equals(*n) {
+		t.Errorf("normal_at( %v, %v ) = %v , wanted %v", s, point, n, wanted)
+	}
+}
+// Scenario: The normal on a sphere at a point on the z axis
+// Given s ← sphere()
+// When n ← normal_at(s, point(0, 0, 1))
+// Then n = vector(0, 0, 1)
+func Test_Normal_of_a_Sphere_at_a_Point_on_the_Z_Axis(t *testing.T) {
+	// Given
+	s := NewUnitSphere()
+	// And
+	point := tuples.Point(0, 0, 1)
+	// When
+	n := s.NormalAt(point)
+	// Expected
+	wanted := tuples.Vector(0, 0, 1)
+	// Then
+	if !wanted.Equals(*n) {
+		t.Errorf("normal_at( %v, %v ) = %v , wanted %v", s, point, n, wanted)
+	}
+}
+// Scenario: The normal on a sphere at a non-axial point
+// Given s ← sphere()
+// When n ← normal_at(s, point(√3/3, √3/3, √3/3))
+// Then n = vector(√3/3, √3/3, √3/3)
+func Test_Normal_of_a_Sphere_at_a_NonAxial_Point(t *testing.T) {
+	// Given
+	s := NewUnitSphere()
+	// And
+	val := math.Sqrt(3)/ 3.0
+	point := tuples.Point(val, val, val)
+	// When
+	n := s.NormalAt(point)
+	// Expected
+	wanted := tuples.Vector(val, val, val)
+	// Then
+	if !wanted.Equals(*n) {
+		t.Errorf("normal_at( %v, %v ) = %v , wanted %v", s, point, n, wanted)
+	}
+}
+
+// Scenario: The normal is a normalized vector
+// Given s ← sphere()
+// When n ← normal_at(s, point(√3/3, √3/3, √3/3))
+// Then n = normalize(n)
+func Test_Normal_is_a_Normalized_Vector(t *testing.T) {
+	// Given
+	s := NewUnitSphere()
+	// And
+	val := math.Sqrt(3)/ 3.0
+	point := tuples.Point(val, val, val)
+	// When
+	n := s.NormalAt(point)
+	// Expected
+	wanted := n.Normalize()
+	// And
+	if !n.IsVector() {
+		t.Errorf("normal_at( %v, %v ) is Point , wanted Vector", s, point)
+	}
+	// Then
+	if !wanted.Equals(*n) {
+		t.Errorf("normal_at( %v, %v ) = %v (normalized) , wanted %v", s, point, n, wanted)
 	}
 }

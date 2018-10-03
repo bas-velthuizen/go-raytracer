@@ -35,3 +35,9 @@ func (s *Sphere) SetTransform(transform *matrix.Matrix) {
 	s.transform = *transform
 	fmt.Printf("sphere with new transform: %v\n\n", s)
 }
+
+func (s Sphere) NormalAt(point tuples.Tuple) *tuples.Tuple {
+	normalVector := point.Subtract(s.center)
+	normal := normalVector.Normalize()
+	return &normal
+}
