@@ -52,7 +52,7 @@ func Test_Changing_a_Sphere_s_Transformation(t *testing.T) {
 // And xs[1].t = 7
 func Test_Intersecting_a_Scaled_Sphere_with_a_Ray(t *testing.T) {
 	// Given
-	r := NewRay(tuples.Point(0,0,-5), tuples.Vector(0,0,1))
+	r := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
 	// And
 	s := NewUnitSphere()
 	// When
@@ -85,7 +85,7 @@ func Test_Intersecting_a_Scaled_Sphere_with_a_Ray(t *testing.T) {
 // Then xs.count = 0
 func Test_Intersecting_a_Translated_Sphere_with_a_Ray(t *testing.T) {
 	// Given
-	r := NewRay(tuples.Point(0,0,-5), tuples.Vector(0,0,1))
+	r := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
 	// And
 	s := NewUnitSphere()
 	// When
@@ -137,6 +137,7 @@ func Test_Normal_of_a_Sphere_at_a_Point_on_the_Y_Axis(t *testing.T) {
 		t.Errorf("normal_at( %v, %v ) = %v , wanted %v", s, point, n, wanted)
 	}
 }
+
 // Scenario: The normal on a sphere at a point on the z axis
 // Given s ← sphere()
 // When n ← normal_at(s, point(0, 0, 1))
@@ -155,6 +156,7 @@ func Test_Normal_of_a_Sphere_at_a_Point_on_the_Z_Axis(t *testing.T) {
 		t.Errorf("normal_at( %v, %v ) = %v , wanted %v", s, point, n, wanted)
 	}
 }
+
 // Scenario: The normal on a sphere at a non-axial point
 // Given s ← sphere()
 // When n ← normal_at(s, point(√3/3, √3/3, √3/3))
@@ -163,7 +165,7 @@ func Test_Normal_of_a_Sphere_at_a_NonAxial_Point(t *testing.T) {
 	// Given
 	s := NewUnitSphere()
 	// And
-	val := math.Sqrt(3)/ 3.0
+	val := math.Sqrt(3) / 3.0
 	point := tuples.Point(val, val, val)
 	// When
 	n := s.NormalAt(point)
@@ -183,7 +185,7 @@ func Test_Normal_is_a_Normalized_Vector(t *testing.T) {
 	// Given
 	s := NewUnitSphere()
 	// And
-	val := math.Sqrt(3)/ 3.0
+	val := math.Sqrt(3) / 3.0
 	point := tuples.Point(val, val, val)
 	// When
 	n := s.NormalAt(point)
@@ -196,5 +198,49 @@ func Test_Normal_is_a_Normalized_Vector(t *testing.T) {
 	// Then
 	if !wanted.Equals(*n) {
 		t.Errorf("normal_at( %v, %v ) = %v (normalized) , wanted %v", s, point, n, wanted)
+	}
+}
+
+// Scenario: Computing the normal on a translated sphere
+// Given s ← sphere()
+// And set_transform(s, translation(0, 1, 0))
+// When n ← normal_at(s, point(0, 1.70711, -0.70711))
+// Then n = vector(0, 0.70711, -0.70711)
+func Test_Computing_the_Normal_on_a_Translated_Sphere(t *testing.T) {
+	// Given
+	s := NewUnitSphere()
+	// And
+	s.SetTransform(transformations.Translation(0, 1, 0))
+	// And
+	point := tuples.Point(0, 1.70711, -0.70711)
+	// When
+	n := s.NormalAt(point)
+	// Expected
+	wanted := tuples.Vector(0, 0.70711, -0.70711)
+	// Then
+	if !wanted.Equals(*n) {
+		t.Errorf("normal_at( %v, %v ) = %v , wanted %v", s, point, n, wanted)
+	}
+}
+
+// Scenario: Computing the normal on a scaled sphere
+// Given s ← sphere()
+// And set_transform(s, scaling(1, 0.5, 1))
+// When n ← normal_at(s, point(0, √2/2, -√2/2))
+// Then n = vector(0, 0.97014, -0.24254)
+func Test_Computing_the_Normal_on_a_scaled_Sphere(t *testing.T) {
+	// Given
+	s := NewUnitSphere()
+	// And
+	s.SetTransform(transformations.Scaling(1, 0.5, 1))
+	// And
+	point := tuples.Point(0, math.Sqrt(2)/2.0, -math.Sqrt(2)/2.0)
+	// When
+	n := s.NormalAt(point)
+	// Expected
+	wanted := tuples.Vector(0, 0.97014, -0.24254)
+	// Then
+	if !wanted.Equals(*n) {
+		t.Errorf("normal_at( %v, %v ) = %v , wanted %v", s, point, n, wanted)
 	}
 }
