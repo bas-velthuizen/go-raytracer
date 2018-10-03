@@ -109,3 +109,8 @@ func Point(x float64, y float64, z float64) Tuple {
 func Vector(x float64, y float64, z float64) Tuple {
 	return Tuple{x, y, z, 0.0}
 }
+
+// Reflect returns the reflection of an incoming vector with the current vector as normal
+func (t Tuple) Reflect(in Tuple) Tuple {
+	return in.Subtract(t.Multiply(2 * in.Dot(t)))
+}

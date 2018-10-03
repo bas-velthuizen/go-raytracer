@@ -1,6 +1,9 @@
 package tuples
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 //Scenario: A tuple with w=1.0 is a point
 // Given a ← tuple(4.3, -4.2, 3.1, 1.0)
@@ -91,5 +94,45 @@ func Test_Vector_describes_tuples_with_w_1(t *testing.T) {
 	// Then
 	if !p.Equals(wanted) {
 		t.Errorf("Vector(4, -4, 3) == %v, want %v", p, wanted)
+	}
+}
+
+// Scenario: Reflecting a vector approaching at 45°
+// Given v ← vector(1, -1, 0)
+// And n ← vector(0, 1, 0)
+// When r ← reflect(v, n)
+// Then r = vector(1, 1, 0)
+func Test_Reflecting_a_Vector_Approaching_at_45_degrees(t *testing.T) {
+	// Given
+	v := Vector(1, -1, 0)
+	// And
+	n := Vector(0, 1, 0)
+	// When
+	r := n.Reflect(v)
+	// Expected
+	wanted := Vector(1, 1, 0)
+	// Then
+	if !wanted.Equals(r) {
+		t.Errorf("Reflect( %v, %v) == %v, want %v", v, n, r, wanted)
+	}
+}
+
+// Scenario: Reflecting a vector off a slanted surface
+// Given v ← vector(0, -1, 0)
+// And n ← vector(√2/2, √2/2, 0)
+// When r ← reflect(v, n)
+// Then r = vector(1, 0, 0)
+func Test_Reflecting_a_Vector_off_a_Slanted_Surface(t *testing.T) {
+	// Given
+	v := Vector(0, -1, 0)
+	// And
+	n := Vector(math.Sqrt2/2.0, math.Sqrt2/2.0, 0)
+	// When
+	r := n.Reflect(v)
+	// Expected
+	wanted := Vector(1, 0, 0)
+	// Then
+	if !wanted.Equals(r) {
+		t.Errorf("Reflect( %v, %v) == %v, want %v", v, n, r, wanted)
 	}
 }
