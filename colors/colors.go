@@ -14,6 +14,11 @@ type Color struct {
 	Blue float64
 }
 
+// NewColor constructs a new Color instance
+func NewColor(red, green, blue float64) Color {
+	return Color{red, green, blue}
+}
+
 // Equals checks if two Colors are equal
 func (c Color) Equals(other Color) bool {
 	return math.Abs(c.Red-other.Red) < epsilon &&

@@ -2,6 +2,7 @@ package rays
 
 import (
 	"fmt"
+	"github.com/bas-velthuizen/go-raytracer/materials"
 
 	"github.com/bas-velthuizen/go-raytracer/matrix"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
@@ -12,11 +13,12 @@ type Sphere struct {
 	center    tuples.Tuple
 	radius    float64
 	transform matrix.Matrix
+	Material materials.Material
 }
 
 // NewSphere creates a new Sphere instance
 func NewSphere(center tuples.Tuple, radius float64) *Sphere {
-	return &Sphere{center, radius, *matrix.Identity(4)}
+	return &Sphere{center, radius, *matrix.Identity(4), materials.DefaultMaterial()}
 }
 
 // NewUnitSphere creates a new Sphere instance

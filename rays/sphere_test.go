@@ -1,6 +1,7 @@
 package rays
 
 import (
+	"github.com/bas-velthuizen/go-raytracer/materials"
 	"math"
 	"testing"
 
@@ -242,5 +243,40 @@ func Test_Computing_the_Normal_on_a_scaled_Sphere(t *testing.T) {
 	// Then
 	if !wanted.Equals(*n) {
 		t.Errorf("normal_at( %v, %v ) = %v , wanted %v", s, point, n, wanted)
+	}
+}
+
+// Scenario: A sphere has a default material
+// Given s ← sphere()
+// When m ← s.material
+// Then m = material()
+func Test_a_Sphere_has_a_Default_Material(t *testing.T) {
+	// Given
+	s := NewUnitSphere()
+	// When
+	wantedMaterial := materials.DefaultMaterial()
+	if !wantedMaterial.Equals(s.Material) {
+		t.Errorf("%v has material %v, expected %v", s, s.Material, wantedMaterial)
+	}
+}
+
+// Scenario: A sphere may be assigned a material
+// Given s ← sphere()
+// And m ← material()
+// And m.ambient ← 1
+// When s.material ← m
+// Then s.material = m
+func Test_a_Sphere_May_Be_Assigned_a_Material(t *testing.T) {
+	// Given
+	s := NewUnitSphere()
+	// And
+	m := materials.DefaultMaterial()
+	// And
+	m.Ambient = 1.0
+	// When
+	s.Material = m
+	// Then
+	if !m.Equals(s.Material) {
+		t.Errorf("%v has material %v, expected %v", s, s.Material, m)
 	}
 }
