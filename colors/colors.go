@@ -2,16 +2,28 @@ package colors
 
 import (
 	"fmt"
-	"github.com/bas-velthuizen/go-raytracer/tuples"
 	"math"
+
+	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
 const epsilon = tuples.Epsilon
 
+// Color represents the RGB values of a color
 type Color struct {
-	Red float64
+	Red   float64
 	Green float64
-	Blue float64
+	Blue  float64
+}
+
+// Black returns the representation of black
+func Black() Color {
+	return NewColor(0, 0, 0)
+}
+
+// White returns the representation of white
+func White() Color {
+	return NewColor(1, 1, 1)
 }
 
 // NewColor constructs a new Color instance

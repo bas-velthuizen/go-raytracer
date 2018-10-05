@@ -26,7 +26,7 @@ func Test_the_Default_Material(t *testing.T) {
 	m := DefaultMaterial()
 	// Then
 
-	wantedColor := colors.NewColor(1, 1, 1)
+	wantedColor := colors.White()
 	if !wantedColor.Equals(m.Color) {
 		t.Errorf("%v has color %v, expected %v", m, m.Color, wantedColor)
 	}
@@ -95,7 +95,7 @@ func Test_Lighting_With_the_Eye_Between_Light_and_Surface__Eye_Offset_45(t *test
 	// When
 	result := m.Lighting(light, position, eyev, normalv)
 	// Expected
-	wanted := colors.NewColor(1.0, 1.0, 1.0)
+	wanted := colors.White()
 	// Then
 	if !wanted.Equals(result) {
 		t.Errorf("Lighting( %v, %v, %v, %v ) = %v, Expected %v", m, light, eyev, normalv, result, wanted)

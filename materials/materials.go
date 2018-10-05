@@ -10,7 +10,7 @@ import (
 	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
-// Materual defines the properties of a material
+// Material defines the properties of a material
 type Material struct {
 	Color     colors.Color
 	Ambient   float64
@@ -22,7 +22,7 @@ type Material struct {
 // DefaultMaterial constructs the default material
 func DefaultMaterial() Material {
 	return Material{
-		colors.NewColor(1, 1, 1),
+		colors.White(),
 		0.1,
 		0.9,
 		0.9,
@@ -30,6 +30,7 @@ func DefaultMaterial() Material {
 	}
 }
 
+// Equals checks if this material is the same as another
 func (m Material) Equals(other Material) bool {
 	return m.Color.Equals(other.Color) &&
 		math.Abs(m.Ambient-other.Ambient) <= tuples.Epsilon &&
@@ -49,8 +50,8 @@ func (m Material) Lighting(
 	eyeV tuples.Tuple,
 	normalV tuples.Tuple,
 ) colors.Color {
-	diff := colors.NewColor(0, 0, 0)
-	spec := colors.NewColor(0, 0, 0)
+	diff := colors.Black()
+	spec := colors.Black()
 
 	effectiveColor := m.Color.Blend(light.Intensity)
 	lightV := light.Position.Subtract(position).Normalize()
@@ -60,14 +61,14 @@ func (m Material) Lighting(
 	lightDotNormal := lightV.Dot(normalV)
 
 	if lightDotNormal < 0 {
-		diff = colors.NewColor(0, 0, 0)
-		spec = colors.NewColor(0, 0, 0)
+		diff = colors.Black()
+		spec = colors.Black()
 	} else {
 		diff = effectiveColor.Multiply(m.Diffuse * lightDotNormal)
 		reflectV := normalV.Reflect(lightV.Negate())
 		reflectDotEye := math.Pow(reflectV.Dot(eyeV), m.Shininess)
 		if reflectDotEye <= 0 {
-			spec = colors.NewColor(0, 0, 0)
+			spec = colors.Black()
 		} else {
 			spec = light.Intensity.Multiply(m.Specular * reflectDotEye)
 		}
