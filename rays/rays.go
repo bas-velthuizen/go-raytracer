@@ -10,34 +10,34 @@ import (
 
 // Ray describes a ray of light with an origin and direction
 type Ray struct {
-	origin    tuples.Tuple
-	direction tuples.Tuple
+	Origin    tuples.Tuple
+	Direction tuples.Tuple
 }
 
 // NewRay creates a new ray from a origin and direction
 func NewRay(origin, direction tuples.Tuple) *Ray {
-	return &Ray{origin: origin, direction: direction}
+	return &Ray{Origin: origin, Direction: direction}
 }
 
 // String formats the ray as a string
 func (r Ray) String() string {
-	return fmt.Sprintf("Ray( %v, %v )", r.origin, r.direction)
+	return fmt.Sprintf("Ray( %v, %v )", r.Origin, r.Direction)
 }
 
 // Position calculates the position of the ray at time t
 func (r Ray) Position(t float64) *tuples.Tuple {
-	result := r.origin.Add(r.direction.Multiply(t))
+	result := r.Origin.Add(r.Direction.Multiply(t))
 	return &result
 }
 
 // Intersect calculates the intersections with a Sphere
 func (r Ray) Intersect(s *Sphere) Intersections {
-	rTransformed := r.Transform( *s.transform.Inverse())
+	rTransformed := r.Transform(*s.transform.Inverse())
 
-	sphereToRay := rTransformed.origin.Subtract(s.center)
+	sphereToRay := rTransformed.Origin.Subtract(s.center)
 
-	a := rTransformed.direction.Dot(rTransformed.direction)
-	b := 2 * rTransformed.direction.Dot(sphereToRay)
+	a := rTransformed.Direction.Dot(rTransformed.Direction)
+	b := 2 * rTransformed.Direction.Dot(sphereToRay)
 	c := sphereToRay.Dot(sphereToRay) - 1.0
 
 	discriminant := b*b - 4*a*c
@@ -61,7 +61,7 @@ func (r Ray) Intersect(s *Sphere) Intersections {
 
 // Transform transforms a ray with a matrix, returnning a new ray
 func (r Ray) Transform(m matrix.Matrix) *Ray {
-	newOrigin := m.MultiplyTuple(r.origin)
-	newDirection := m.MultiplyTuple(r.direction)
+	newOrigin := m.MultiplyTuple(r.Origin)
+	newDirection := m.MultiplyTuple(r.Direction)
 	return NewRay(*newOrigin, *newDirection)
 }

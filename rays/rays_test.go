@@ -21,12 +21,12 @@ func Test_Creating_and_Querying_a_Ray(t *testing.T) {
 	// When
 	r := NewRay(origin, direction)
 	// Then
-	if !origin.Equals(r.origin) {
-		t.Errorf("Origin of %v is %v, wanted %v", r, r.origin, origin)
+	if !origin.Equals(r.Origin) {
+		t.Errorf("Origin of %v is %v, wanted %v", r, r.Origin, origin)
 	}
 	// And
-	if !direction.Equals(r.direction) {
-		t.Errorf("direction of %v is %v, wanted %v", r, r.direction, direction)
+	if !direction.Equals(r.Direction) {
+		t.Errorf("direction of %v is %v, wanted %v", r, r.Direction, direction)
 	}
 }
 
@@ -363,12 +363,12 @@ func Test_Translating_a_Ray(t *testing.T) {
 	wantedP := tuples.Point(4, 6, 8)
 	wantedD := tuples.Vector(0, 1, 0)
 	// Then
-	if !wantedP.Equals(r2.origin) {
-		t.Errorf("Transform( %v, %v ).origin = %v, wanted %v", r, m, r2.origin, wantedP)
+	if !wantedP.Equals(r2.Origin) {
+		t.Errorf("Transform( %v, %v ).Origin = %v, wanted %v", r, m, r2.Origin, wantedP)
 	}
 	// And
-	if !wantedD.Equals(r2.direction) {
-		t.Errorf("Transform( %v, %v ).direction = %v, wanted %v", r, m, r2.direction, wantedD)
+	if !wantedD.Equals(r2.Direction) {
+		t.Errorf("Transform( %v, %v ).Direction = %v, wanted %v", r, m, r2.Direction, wantedD)
 	}
 }
 
@@ -389,11 +389,11 @@ func Test_Scaling_a_Ray(t *testing.T) {
 	wantedP := tuples.Point(2, 6, 12)
 	wantedD := tuples.Vector(0, 3, 0)
 	// Then
-	if !wantedP.Equals(r2.origin) {
-		t.Errorf("Transform( %v, %v ).origin = %v, wanted %v", r, m, r2.origin, wantedP)
+	if !wantedP.Equals(r2.Origin) {
+		t.Errorf("Transform( %v, %v ).Origin = %v, wanted %v", r, m, r2.Origin, wantedP)
 	}
 	// And
-	if !wantedD.Equals(r2.direction) {
-		t.Errorf("Transform( %v, %v ).direction = %v, wanted %v", r, m, r2.direction, wantedD)
+	if !wantedD.Equals(r2.Direction) {
+		t.Errorf("Transform( %v, %v ).Direction = %v, wanted %v", r, m, r2.Direction, wantedD)
 	}
 }
