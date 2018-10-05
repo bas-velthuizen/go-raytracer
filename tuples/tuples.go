@@ -92,7 +92,7 @@ func (t Tuple) Dot(other Tuple) float64 {
 		t.W*other.W
 }
 
-// Dot caculates dot product with another vector
+// Cross caculates cross product with another vector
 func (t Tuple) Cross(other Tuple) Tuple {
 	return Vector(
 		t.Y*other.Z-t.Z*other.Y,
