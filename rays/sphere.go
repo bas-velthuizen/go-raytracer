@@ -2,6 +2,8 @@ package rays
 
 import (
 	"fmt"
+	"math"
+
 	"github.com/bas-velthuizen/go-raytracer/materials"
 
 	"github.com/bas-velthuizen/go-raytracer/matrix"
@@ -13,7 +15,7 @@ type Sphere struct {
 	center    tuples.Tuple
 	radius    float64
 	transform matrix.Matrix
-	Material materials.Material
+	Material  materials.Material
 }
 
 // NewSphere creates a new Sphere instance
@@ -45,4 +47,12 @@ func (s Sphere) NormalAt(worldPoint tuples.Tuple) *tuples.Tuple {
 	worldNormal.W = 0
 	normal := worldNormal.Normalize()
 	return &normal
+}
+
+// Equals checks if another sphere is equal to the current sphere
+func (s Sphere) Equals(other Sphere) bool {
+	return s.center.Equals(other.center) &&
+		s.Material.Equals(other.Material) &&
+		(math.Abs(s.radius-other.radius) < tuples.Epsilon) &&
+		s.transform.Equals(other.transform)
 }
