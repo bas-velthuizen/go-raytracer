@@ -5,6 +5,7 @@ import (
 	"math"
 
 	"github.com/bas-velthuizen/go-raytracer/matrix"
+	"github.com/bas-velthuizen/go-raytracer/spheres"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
@@ -31,10 +32,10 @@ func (r Ray) Position(t float64) *tuples.Tuple {
 }
 
 // Intersect calculates the intersections with a Sphere
-func (r Ray) Intersect(s *Sphere) Intersections {
-	rTransformed := r.Transform(*s.transform.Inverse())
+func (r Ray) Intersect(s *spheres.Sphere) Intersections {
+	rTransformed := r.Transform(*s.Transform.Inverse())
 
-	sphereToRay := rTransformed.Origin.Subtract(s.center)
+	sphereToRay := rTransformed.Origin.Subtract(s.Center)
 
 	a := rTransformed.Direction.Dot(rTransformed.Direction)
 	b := 2 * rTransformed.Direction.Dot(sphereToRay)

@@ -5,6 +5,7 @@ import (
 	"github.com/bas-velthuizen/go-raytracer/colors"
 	"github.com/bas-velthuizen/go-raytracer/lights"
 	"github.com/bas-velthuizen/go-raytracer/rays"
+	"github.com/bas-velthuizen/go-raytracer/spheres"
 	"github.com/bas-velthuizen/go-raytracer/transformations"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
@@ -20,7 +21,7 @@ func main() {
 	trans := transformations.Translation(0, 0, 2)
 
 	origin := tuples.Point(0, 0, -5)
-	s := rays.NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	s.Material.Color = colors.NewColor(0.2, 1, 1)
 	s.SetTransform(trans.Multiply(*scale) /*.Multiply(*rot).Multiply(*shear)*/)
 	depth := 10.0

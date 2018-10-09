@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/bas-velthuizen/go-raytracer/colors"
+	"github.com/bas-velthuizen/go-raytracer/spheres"
 	"github.com/bas-velthuizen/go-raytracer/transformations"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
 
@@ -17,7 +18,7 @@ import (
 // And w has no light source
 func Test_Creating_a_World(t *testing.T) {
 	// Given
-	w := NewWorld([]rays.Sphere{}, nil)
+	w := NewWorld([]spheres.Sphere{}, nil)
 	// Then
 	if 0 != len(w.Objects) {
 		t.Errorf("%v has %d Objects, expected %d", w, len(w.Objects), 0)
@@ -42,12 +43,12 @@ func Test_The_Default_World(t *testing.T) {
 	// Given
 	light := lights.NewPointLight(tuples.Point(-10, 10, -10), colors.White())
 	// And
-	s1 := rays.NewUnitSphere()
+	s1 := spheres.NewUnitSphere()
 	s1.Material.Color = colors.NewColor(0.8, 1.0, 0.6)
 	s1.Material.Diffuse = 0.7
 	s1.Material.Specular = 0.2
 	// And
-	s2 := rays.NewUnitSphere()
+	s2 := spheres.NewUnitSphere()
 	s2.SetTransform(transformations.Scaling(0.5, 0.5, 0.5))
 	// When
 	world := DefaultWorld()
@@ -82,23 +83,23 @@ func Test_Intersect_a_World_With_a_Ray(t *testing.T) {
 	// When
 	xs := world.Intersect(*ray)
 	// Then
-	if len(xs) != 4 {
-		t.Errorf("Got %d intersections, expected %d", len(xs), 4)
+	if len(*xs) != 4 {
+		t.Errorf("Got %d intersections, expected %d", len(*xs), 4)
 	}
 	// And
-	if xs[0].Time != 4.0 {
-		t.Errorf("xs[0].Time = %9.6f, expected %9.6f", xs[0].Time, 4.0)
+	if (*xs)[0].Time != 4.0 {
+		t.Errorf("xs[0].Time = %9.6f, expected %9.6f", (*xs)[0].Time, 4.0)
 	}
 	// And
-	if xs[1].Time != 4.5 {
-		t.Errorf("xs[1].Time = %9.6f, expected %9.6f", xs[1].Time, 4.5)
+	if (*xs)[1].Time != 4.5 {
+		t.Errorf("xs[1].Time = %9.6f, expected %9.6f", (*xs)[1].Time, 4.5)
 	}
 	// And
-	if xs[2].Time != 5.5 {
-		t.Errorf("xs[2].Time = %9.6f, expected %9.6f", xs[2].Time, 5.5)
+	if (*xs)[2].Time != 5.5 {
+		t.Errorf("xs[2].Time = %9.6f, expected %9.6f", (*xs)[2].Time, 5.5)
 	}
 	// And
-	if xs[3].Time != 6.0 {
-		t.Errorf("xs[3].Time = %9.6f, expected %9.6f", xs[3].Time, 6.0)
+	if (*xs)[3].Time != 6.0 {
+		t.Errorf("xs[3].Time = %9.6f, expected %9.6f", (*xs)[3].Time, 6.0)
 	}
 }

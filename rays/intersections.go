@@ -1,18 +1,29 @@
 package rays
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/bas-velthuizen/go-raytracer/spheres"
+)
 
 // Intersection aggregates a time value and a Sphere
 type Intersection struct {
 	Time   float64
-	Object *Sphere
+	Object *spheres.Sphere
 }
+
+// ByTime defines a Sort interface for Intersection Slices by Time
+type ByTime []*Intersection
+
+func (a ByTime) Len() int           { return len(a) }
+func (a ByTime) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByTime) Less(i, j int) bool { return a[i].Time < a[j].Time }
 
 // Intersections groups multiple Intersection instances
 type Intersections []*Intersection
 
 // NewIntersection creates a new intersection and passes a reference to it
-func NewIntersection(time float64, object *Sphere) *Intersection {
+func NewIntersection(time float64, object *spheres.Sphere) *Intersection {
 	return &Intersection{Time: time, Object: object}
 }
 

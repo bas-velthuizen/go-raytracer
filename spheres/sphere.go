@@ -1,4 +1,4 @@
-package rays
+package spheres
 
 import (
 	"fmt"
@@ -12,9 +12,9 @@ import (
 
 // Sphere describes a sphere shape
 type Sphere struct {
-	center    tuples.Tuple
-	radius    float64
-	transform matrix.Matrix
+	Center    tuples.Tuple
+	Radius    float64
+	Transform matrix.Matrix
 	Material  materials.Material
 }
 
@@ -30,20 +30,20 @@ func NewUnitSphere() *Sphere {
 
 // String formats Object to readable string
 func (s Sphere) String() string {
-	return fmt.Sprintf("Sphere( %v, %v, %v )", s.center, s.radius, s.transform)
+	return fmt.Sprintf("Sphere( %v, %v, %v, %v )", s.Center, s.Radius, s.Transform, s.Material)
 }
 
 // SetTransform sets the transform value of the sphere
 func (s *Sphere) SetTransform(transform *matrix.Matrix) {
-	s.transform = *transform
+	s.Transform = *transform
 	fmt.Printf("sphere with new transform: %v\n\n", s)
 }
 
 // NormalAt calculates the normal vector on a sphere at a certain world point
 func (s Sphere) NormalAt(worldPoint tuples.Tuple) *tuples.Tuple {
-	objectPoint := s.transform.Inverse().MultiplyTuple(worldPoint)
-	objectNormal := objectPoint.Subtract(s.center)
-	worldNormal := s.transform.Inverse().Transpose().MultiplyTuple(objectNormal)
+	objectPoint := s.Transform.Inverse().MultiplyTuple(worldPoint)
+	objectNormal := objectPoint.Subtract(s.Center)
+	worldNormal := s.Transform.Inverse().Transpose().MultiplyTuple(objectNormal)
 	worldNormal.W = 0
 	normal := worldNormal.Normalize()
 	return &normal
@@ -51,8 +51,8 @@ func (s Sphere) NormalAt(worldPoint tuples.Tuple) *tuples.Tuple {
 
 // Equals checks if another sphere is equal to the current sphere
 func (s Sphere) Equals(other Sphere) bool {
-	return s.center.Equals(other.center) &&
+	return s.Center.Equals(other.Center) &&
 		s.Material.Equals(other.Material) &&
-		(math.Abs(s.radius-other.radius) < tuples.Epsilon) &&
-		s.transform.Equals(other.transform)
+		(math.Abs(s.Radius-other.Radius) < tuples.Epsilon) &&
+		s.Transform.Equals(other.Transform)
 }

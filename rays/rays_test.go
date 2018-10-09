@@ -3,6 +3,7 @@ package rays
 import (
 	"testing"
 
+	"github.com/bas-velthuizen/go-raytracer/spheres"
 	"github.com/bas-velthuizen/go-raytracer/transformations"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
@@ -77,7 +78,7 @@ func Test_a_Ray_Intersects_a_Sphere_at_Two_Points(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
 	// And
-	s := NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	// Expected
 	wantedCount := 2
 	wanted0 := 4.0
@@ -109,7 +110,7 @@ func Test_a_Ray_Intersects_a_Sphere_at_a_Tangent(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 1, -5), tuples.Vector(0, 0, 1))
 	// And
-	s := NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	// Expected
 	wantedCount := 2
 	wanted0 := 5.0
@@ -139,7 +140,7 @@ func Test_a_Ray_Misses_a_Sphere(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 2, -5), tuples.Vector(0, 0, 1))
 	// And
-	s := NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	// Expected
 	wantedCount := 0
 	// When
@@ -161,7 +162,7 @@ func Test_a_Ray_Originates_Inside_a_Sphere(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 0, 0), tuples.Vector(0, 0, 1))
 	// And
-	s := NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	// Expected
 	wantedCount := 2
 	wanted0 := -1.0
@@ -193,7 +194,7 @@ func Test_a_Sphere_is_Behind_a_Ray(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 0, 5), tuples.Vector(0, 0, 1))
 	// And
-	s := NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	// Expected
 	wantedCount := 2
 	wanted0 := -6.0
@@ -225,7 +226,7 @@ func Test_Intersects_Sets_the_Object_on_the_Intersection(t *testing.T) {
 	// Given
 	r := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
 	// And
-	s := NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	// Expected
 	wantedCount := 2
 	// When
@@ -253,7 +254,7 @@ func Test_Intersects_Sets_the_Object_on_the_Intersection(t *testing.T) {
 // Then h = i1
 func Test_The_Hit_When_all_Intersections_Have_Positive_t(t *testing.T) {
 	// Given
-	s := NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	// And
 	i1 := NewIntersection(1.0, s)
 	// And
@@ -277,7 +278,7 @@ func Test_The_Hit_When_all_Intersections_Have_Positive_t(t *testing.T) {
 // Then h = i2
 func Test_The_Hit_When_Some_Intersections_Have_Negative_t(t *testing.T) {
 	// Given
-	s := NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	// And
 	i1 := NewIntersection(-1.0, s)
 	// And
@@ -301,7 +302,7 @@ func Test_The_Hit_When_Some_Intersections_Have_Negative_t(t *testing.T) {
 // Then h is nothing
 func Test_The_Hit_When_all_Intersections_Have_Negative_t(t *testing.T) {
 	// Given
-	s := NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	// And
 	i1 := NewIntersection(-2.0, s)
 	// And
@@ -327,7 +328,7 @@ func Test_The_Hit_When_all_Intersections_Have_Negative_t(t *testing.T) {
 // Then h = i4
 func Test_The_Hit_is_Always_the_Lowest_NonNegative_Intersections(t *testing.T) {
 	// Given
-	s := NewUnitSphere()
+	s := spheres.NewUnitSphere()
 	// And
 	i1 := NewIntersection(5.0, s)
 	// And
@@ -395,5 +396,63 @@ func Test_Scaling_a_Ray(t *testing.T) {
 	// And
 	if !wantedD.Equals(r2.Direction) {
 		t.Errorf("Transform( %v, %v ).Direction = %v, wanted %v", r, m, r2.Direction, wantedD)
+	}
+}
+
+// Scenario: Intersecting a scaled sphere with a ray
+// Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
+// And s ← sphere()
+// When set_transform(s, scaling(2, 2, 2))
+// And xs ← intersect(s, r)
+// Then xs.count = 2
+// And xs[0].t = 3
+// And xs[1].t = 7
+func Test_Intersecting_a_Scaled_Sphere_with_a_Ray(t *testing.T) {
+	// Given
+	r := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
+	// And
+	s := spheres.NewUnitSphere()
+	// When
+	s.SetTransform(transformations.Scaling(2, 2, 2))
+	// And
+	xs := r.Intersect(s)
+	// Expected
+	wantedCount := 2
+	wanted0 := 3.0
+	wanted1 := 7.0
+	// Then
+	if wantedCount != len(xs) {
+		t.Errorf("len(%v) = %d, expected %d", xs, len(xs), wantedCount)
+	}
+	// And
+	if wanted0 != (*xs[0]).Time {
+		t.Errorf("(%v).Time = %9.6f, expected %9.6f", *xs[0], (*xs[0]).Time, wanted0)
+	}
+	// And
+	if wanted1 != (*xs[1]).Time {
+		t.Errorf("(%v).Time = %9.6f, expected %9.6f", *xs[1], (*xs[1]).Time, wanted1)
+	}
+}
+
+// Scenario: Intersecting a translated sphere with a ray
+// Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
+// And s ← sphere()
+// When set_transform(s, translation(5, 0, 0))
+// And xs ← intersect(s, r)
+// Then xs.count = 0
+func Test_Intersecting_a_Translated_Sphere_with_a_Ray(t *testing.T) {
+	// Given
+	r := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
+	// And
+	s := spheres.NewUnitSphere()
+	// When
+	s.SetTransform(transformations.Translation(5, 0, 0))
+	// And
+	xs := r.Intersect(s)
+	// Expected
+	wantedCount := 0
+	// Then
+	if wantedCount != len(xs) {
+		t.Errorf("len(%v) = %d, expected %d", xs, len(xs), wantedCount)
 	}
 }
