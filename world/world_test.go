@@ -64,3 +64,41 @@ func Test_The_Default_World(t *testing.T) {
 		t.Errorf("Expected %v to contain %v, but it doesn't", world, s2)
 	}
 }
+
+// Scenario: Intersect a world with a ray
+// Given world ← default_world()
+// And ray ← ray(point(0, 0, -5), vector(0, 0, 1))
+// When xs ← intersect_world(world, ray)
+// Then xs.count = 4
+// And xs[0].t = 4
+// And xs[1].t = 4.5
+// And xs[2].t = 5.5
+
+func Test_Intersect_a_World_With_a_Ray(t *testing.T) {
+	// Given
+	world := DefaultWorld()
+	// And
+	ray := rays.NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
+	// When
+	xs := world.Intersect(*ray)
+	// Then
+	if len(xs) != 4 {
+		t.Errorf("Got %d intersections, expected %d", len(xs), 4)
+	}
+	// And
+	if xs[0].Time != 4.0 {
+		t.Errorf("xs[0].Time = %9.6f, expected %9.6f", xs[0].Time, 4.0)
+	}
+	// And
+	if xs[1].Time != 4.5 {
+		t.Errorf("xs[1].Time = %9.6f, expected %9.6f", xs[1].Time, 4.5)
+	}
+	// And
+	if xs[2].Time != 5.5 {
+		t.Errorf("xs[2].Time = %9.6f, expected %9.6f", xs[2].Time, 5.5)
+	}
+	// And
+	if xs[3].Time != 6.0 {
+		t.Errorf("xs[3].Time = %9.6f, expected %9.6f", xs[3].Time, 6.0)
+	}
+}

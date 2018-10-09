@@ -1,11 +1,13 @@
 package world
 
 import (
+	"github.com/bas-velthuizen/go-raytracer/arrays"
 	"github.com/bas-velthuizen/go-raytracer/colors"
 	"github.com/bas-velthuizen/go-raytracer/lights"
 	"github.com/bas-velthuizen/go-raytracer/rays"
 	"github.com/bas-velthuizen/go-raytracer/transformations"
 	"github.com/bas-velthuizen/go-raytracer/tuples"
+	"sort"
 )
 
 // World defines the light sources and objects in a world
@@ -42,4 +44,13 @@ func (w World) Contains(object rays.Sphere) bool {
 		}
 	}
 	return false
+}
+
+func (w World) Intersect(ray rays.Ray) rays.Intersections {
+	xsArray := make([]*rays.Intersection, 0, 0)
+	for i := 0; i < len(w.Objects); i++ {
+		partXsArray := ray.Intersect(&w.Objects[i])
+		xsArray = append(xsArray, partXsArray...)
+	}
+	sort.Sort() // TODO sort the intersections
 }
