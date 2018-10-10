@@ -57,3 +57,7 @@ func (w World) Intersect(ray rays.Ray) *rays.Intersections {
 	sort.Sort(rays.ByTime(xsArray))
 	return rays.NewIntersections(xsArray)
 }
+
+func (w World) ShadeHit(hit rays.Intersection) colors.Color{
+	return colors.Black()
+}

@@ -103,3 +103,66 @@ func Test_Intersect_a_World_With_a_Ray(t *testing.T) {
 		t.Errorf("xs[3].Time = %9.6f, expected %9.6f", (*xs)[3].Time, 6.0)
 	}
 }
+
+// Scenario: Shading an intersection
+// Given world ← default_world()
+// And ray ← ray(point(0, 0, -5), vector(0, 0, 1))
+// And shape ← the first object in world
+// And hit ← intersection(4, shape)
+// When prepare_hit(hit, ray)
+// And c ← shade_hit(world, hit)
+// Then c = color(0.38066, 0.47583, 0.2855)
+func Test_Shading_an_Intersection(t *testing.T) {
+	// Given
+	world := DefaultWorld()
+	// And
+	ray := rays.NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
+	// And
+	shape := world.Objects[0]
+	// And
+	hit := rays.NewIntersection(4, &shape)
+	// When
+	hit.PrepareHit(*ray)
+	// And
+	c := world.ShadeHit(*hit)
+	// Expected
+	wantedC := colors.NewColor(0.38066, 0.47583, 0.2855)
+	// Then
+	if !wantedC.Equals(c) {
+		t.Errorf("world.ShadeHit(%v) = %v, expected %v", hit, c, wantedC)
+	}
+}
+
+
+// Scenario: Shading an intersection from the inside
+// Given world ← default_world()
+// And world.light ← point_light(point(0, 0.25, 0), color(1, 1, 1))
+// And ray ← ray(point(0, 0, 0), vector(0, 0, 1))
+// And shape ← the second object in world
+// And hit ← intersection(0.5, shape)
+// When prepare_hit(hit, ray)
+// And c ← shade_hit(world, hit)
+// Then c = color(0.90498, 0.90498, 0.90498)
+func Test_Shading_an_Intersection_from_the_Inside(t *testing.T) {
+	// Given
+	world := DefaultWorld()
+	// And
+	light := lights.NewPointLight(tuples.Point(0, 0.25, 0), colors.NewColor(1, 1, 1))
+	world.LightSource = &light
+	// And
+	ray := rays.NewRay(tuples.Point(0, 0, 0), tuples.Vector(0, 0, 1))
+	// And
+	shape := world.Objects[0]
+	// And
+	hit := rays.NewIntersection(4, &shape)
+	// When
+	hit.PrepareHit(*ray)
+	// And
+	c := world.ShadeHit(*hit)
+	// Expected
+	wantedC := colors.NewColor(0.90498, 0.90498, 0.90498)
+	// Then
+	if !wantedC.Equals(c) {
+		t.Errorf("world.ShadeHit(%v) = %v, expected %v", hit, c, wantedC)
+	}
+}

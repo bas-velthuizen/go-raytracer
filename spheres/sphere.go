@@ -36,7 +36,7 @@ func (s Sphere) String() string {
 // SetTransform sets the transform value of the sphere
 func (s *Sphere) SetTransform(transform *matrix.Matrix) {
 	s.Transform = *transform
-	fmt.Printf("sphere with new transform: %v\n\n", s)
+	// fmt.Printf("sphere with new transform: %v\n\n", s)
 }
 
 // NormalAt calculates the normal vector on a sphere at a certain world point
