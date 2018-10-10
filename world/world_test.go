@@ -24,8 +24,8 @@ func Test_Creating_a_World(t *testing.T) {
 		t.Errorf("%v has %d Objects, expected %d", w, len(w.Objects), 0)
 	}
 	// And w has no light source
-	if nil != w.LightSource {
-		t.Errorf("%v has LightSource %v, expected none", w, w.LightSource)
+	if nil != w.LightSources {
+		t.Errorf("%v has LightSource %v, expected none", w, w.LightSources)
 	}
 }
 
@@ -53,8 +53,8 @@ func Test_The_Default_World(t *testing.T) {
 	// When
 	world := DefaultWorld()
 	// Then
-	if !light.Equals(*world.LightSource) {
-		t.Errorf("%v has LightSource %v, expected %v", world, world.LightSource, light)
+	if !light.Equals(world.LightSources[0]) {
+		t.Errorf("%v has LightSource %v, expected %v", world, world.LightSources[0], light)
 	}
 	// And
 	if !world.Contains(*s1) {
@@ -147,7 +147,7 @@ func Test_Shading_an_Intersection_from_the_Inside(t *testing.T) {
 	world := DefaultWorld()
 	// And
 	light := lights.NewPointLight(tuples.Point(0, 0.25, 0), colors.White())
-	world.LightSource = &light
+	world.LightSources = []lights.PointLight{light}
 	// And
 	ray := rays.NewRay(tuples.Point(0, 0, 0), tuples.Vector(0, 0, 1))
 	// And

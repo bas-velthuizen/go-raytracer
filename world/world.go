@@ -13,13 +13,13 @@ import (
 
 // World defines the light sources and objects in a world
 type World struct {
-	Objects     []spheres.Sphere
-	LightSource *lights.PointLight
+	Objects      []spheres.Sphere
+	LightSources []lights.PointLight
 }
 
 // NewWorld returns a new World object with the provides Objects and Light Source
-func NewWorld(Objects []spheres.Sphere, LightSource *lights.PointLight) World {
-	return World{Objects, LightSource}
+func NewWorld(Objects []spheres.Sphere, LightSources []lights.PointLight) World {
+	return World{Objects, LightSources}
 }
 
 // DefaultWorld returns a new Default World object
@@ -34,7 +34,7 @@ func DefaultWorld() World {
 	s2 := spheres.NewUnitSphere()
 	s2.SetTransform(transformations.Scaling(0.5, 0.5, 0.5))
 
-	return World{Objects: []spheres.Sphere{*s1, *s2}, LightSource: &light}
+	return World{Objects: []spheres.Sphere{*s1, *s2}, LightSources: []lights.PointLight{light}}
 }
 
 // Contains checks whether the world contains this object
@@ -60,9 +60,14 @@ func (w World) Intersect(ray rays.Ray) *rays.Intersections {
 
 // ShadeHit calculates the color of a hit in the world
 func (w World) ShadeHit(hit rays.Intersection) colors.Color {
-	return hit.Object.Material.Lighting(
-		*w.LightSource,
-		hit.Point,
-		hit.EyeV,
-		hit.NormalV)
+	result := colors.Black()
+	for i := 0; i < len(w.LightSources); i++ {
+		c := hit.Object.Material.Lighting(
+			w.LightSources[i],
+			hit.Point,
+			hit.EyeV,
+			hit.NormalV)
+		result = result.Add(c)
+	}
+	return result
 }
