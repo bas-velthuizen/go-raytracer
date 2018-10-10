@@ -73,21 +73,83 @@ func Test_Precomputing_the_State_of_an_Intersection(t *testing.T) {
 	// And
 	hit := NewIntersection(4, shape)
 	// When
-	hit.Prepare(ray)
+	hit.PrepareHit(*ray)
 	// Expected
 	wantedP := tuples.Point(0, 0, -1)
 	wantedE := tuples.Vector(0, 0, -1)
 	wantedN := tuples.Vector(0, 0, -1)
 	// Then
 	if !hit.Point.Equals(wantedP) {
-
+		t.Errorf("hit.Point = %v, expected %v", hit.Point, wantedP)
 	}
 	// And
-	if !hit.Eyev.Equals(wantedE) {
-
+	if !hit.EyeV.Equals(wantedE) {
+		t.Errorf("hit.EyeV = %v, expected %v", hit.EyeV, wantedE)
 	}
 	// And
-	if !hit.Normalv.Equals(wantedN) {
+	if !hit.NormalV.Equals(wantedN) {
+		t.Errorf("hit.NormalV = %v, expected %v", hit.NormalV, wantedN)
+	}
+}
 
+// Scenario: An intersection occurs on the outside
+// Given ray ← ray(point(0, 0, -5), vector(0, 0, 1))
+// And shape ← sphere()
+// And hit ← intersection(4, shape)
+// When prepare_hit(hit, ray)
+// Then hit.inside = false
+func Test_An_Intersection_Occurs_on_the_Outside(t *testing.T) {
+	// Given
+	ray := NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
+	// And
+	shape := spheres.NewUnitSphere()
+	// And
+	hit := NewIntersection(4, shape)
+	// When
+	hit.PrepareHit(*ray)
+	// Then
+	if hit.Inside {
+		t.Errorf("hit.Inside = %v, expected %v", hit.Inside, false)
+	}
+}
+
+// Scenario: An intersection occurs on the inside
+// Given ray ← ray(point(0, 0, 0), vector(0, 0, 1))
+// And shape ← sphere()
+// And hit ← intersection(1, shape)
+// When prepare_hit(hit, ray)
+// Then hit.point = point(0, 0, 1)
+// And hit.eyev = vector(0, 0, -1)
+// And hit.inside = true
+// normal would have been (0, 0, 1), but is inverted!
+// And hit.normalv = vector(0, 0, -1)
+func Test_An_Intersection_Occurs_on_the_Inside(t *testing.T) {
+	// Given
+	ray := NewRay(tuples.Point(0, 0, 0), tuples.Vector(0, 0, 1))
+	// And
+	shape := spheres.NewUnitSphere()
+	// And
+	hit := NewIntersection(1, shape)
+	// When
+	hit.PrepareHit(*ray)
+	// Expected
+	wantedP := tuples.Point(0, 0, 1)
+	wantedE := tuples.Vector(0, 0, -1)
+	wantedN := tuples.Vector(0, 0, -1)
+	// Then
+	if !hit.Point.Equals(wantedP) {
+		t.Errorf("hit.Point = %v, expected %v", hit.Point, wantedP)
+	}
+	// And
+	if !hit.EyeV.Equals(wantedE) {
+		t.Errorf("hit.EyeV = %v, expected %v", hit.EyeV, wantedE)
+	}
+	// And
+	if !hit.Inside {
+		t.Errorf("hit.Inside = %v, expected %v", hit.Inside, true)
+	}	// And
+	// And
+	if !hit.NormalV.Equals(wantedN) {
+		t.Errorf("hit.NormalV = %v, expected %v", hit.NormalV, wantedN)
 	}
 }

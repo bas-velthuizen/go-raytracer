@@ -2,14 +2,18 @@ package rays
 
 import (
 	"fmt"
-
 	"github.com/bas-velthuizen/go-raytracer/spheres"
+	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
 // Intersection aggregates a time value and a Sphere
 type Intersection struct {
-	Time   float64
-	Object *spheres.Sphere
+	Time    float64
+	Object  *spheres.Sphere
+	Point   tuples.Tuple
+	EyeV    tuples.Tuple
+	NormalV tuples.Tuple
+	Inside  bool
 }
 
 // ByTime defines a Sort interface for Intersection Slices by Time
@@ -29,7 +33,7 @@ func NewIntersection(time float64, object *spheres.Sphere) *Intersection {
 
 // String formats Intersection to readable string
 func (i Intersection) String() string {
-	return fmt.Sprintf("Intersection( %9.6f, %v )", i.Time, i.Object)
+	return fmt.Sprintf("Intersection( %9.6f, %v, %v )", i.Time, i.Object, i.Inside)
 }
 
 // NewIntersections creates a new collection of Intersection references
@@ -61,4 +65,17 @@ func (xs Intersections) Hit() *Intersection {
 		return nil
 	}
 	return xs[minIndex]
+}
+
+// PrepareHit precomputes the state of an intersection
+func (i *Intersection) PrepareHit(ray Ray) {
+	i.Point = *ray.Position(i.Time)
+	i.EyeV = ray.Direction.Negate()
+	i.NormalV = *i.Object.NormalAt(i.Point)
+	if i.NormalV.Dot(i.EyeV) < 0 {
+		i.Inside = true
+		i.NormalV = i.NormalV.Negate()
+	} else {
+		i.Inside = false
+	}
 }
