@@ -165,3 +165,74 @@ func Test_Shading_an_Intersection_from_the_Inside(t *testing.T) {
 		t.Errorf("world.ShadeHit(%v) = %v, expected %v", hit, c, wantedC)
 	}
 }
+
+// Scenario: The color when a ray misses
+// Given world ← default_world()
+// And ray ← ray(point(0, 0, -5), vector(0, 1, 0))
+// When c ← color_at(world, ray)
+// Then c = color(0, 0, 0)
+func Test_the_Color_When_a_Ray_Misses(t *testing.T) {
+	// Given
+	world := DefaultWorld()
+	// And
+	ray := rays.NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 1, 0))
+	// When
+	c := world.ColorAt(*ray)
+	// Then
+	if !colors.Black().Equals(c) {
+		t.Errorf("world.ColorAt(%v) = %v, Expected %v", ray, c, colors.Black())
+	}
+}
+
+// Scenario: The color when a ray hits
+// Given world ← default_world()
+// And ray ← ray(point(0, 0, -5), vector(0, 0, 1))
+// When c ← color_at(world, ray)
+// Then c = color(0.38066, 0.47583, 0.2855)
+func Test_the_Color_When_a_Ray_Hits(t *testing.T) {
+	// Given
+	world := DefaultWorld()
+	// And
+	ray := rays.NewRay(tuples.Point(0, 0, -5), tuples.Vector(0, 0, 1))
+	// When
+	c := world.ColorAt(*ray)
+	// Expected
+	wanted := colors.NewColor(0.38066, 0.47583, 0.2855)
+	// Then
+	if !wanted.Equals(c) {
+		t.Errorf("world.ColorAt(%v) = %v, Expected %v", ray, c, wanted)
+	}
+}
+
+// Scenario: The color with an intersection behind the ray
+// Given world ← default_world()
+// And outer ← the first object in world
+// And outer.material.ambient ← 1
+// And inner ← the second object in world
+// And inner.material.ambient ← 1
+// And ray ← ray(point(0, 0, -0.75), vector(0, 0, 1))
+// When c ← color_at(world, ray)
+// Then c = inner.material.color
+func Test_the_Color_With_an_Intersection_Behind_the_Ray(t *testing.T) {
+	// Given
+	world := DefaultWorld()
+	// And
+	outer := world.Objects[0]
+	// And
+	outer.Material.Ambient = 1
+	// And
+	inner := world.Objects[1]
+	// And
+	inner.Material.Ambient = 1
+	// And
+	ray := rays.NewRay(tuples.Point(0, 0, -0.75), tuples.Vector(0, 0, 1))
+	// When
+	c := world.ColorAt(*ray)
+	// Expected
+	wanted := inner.Material.Color
+	// Then
+	if !wanted.Equals(c) {
+		t.Errorf("world.ColorAt(%v) = %v, Expected %v", ray, c, wanted)
+	}
+
+}

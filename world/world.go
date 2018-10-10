@@ -71,3 +71,21 @@ func (w World) ShadeHit(hit rays.Intersection) colors.Color {
 	}
 	return result
 }
+
+// ColorAt calculates the color caused by a ray
+func (w World) ColorAt(ray rays.Ray) colors.Color {
+	// 1. Call intersect_world to find the intersections of the given ray with the given
+	// world.
+	xs := w.Intersect(ray)
+	// 2. Find the hit from the resulting intersections.
+	hit := xs.Hit()
+	// 3. Return the color black if there is no hit.
+	if hit == nil {
+		return colors.Black()
+	}
+	// 4. Otherwise, prepare the hit with prepare_hit.
+	hit.PrepareHit(ray)
+	// 5. Finally, call shade_hit to find the color at the hit intersection.
+	result := w.ShadeHit(*hit)
+	return result
+}
