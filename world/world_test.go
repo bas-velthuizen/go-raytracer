@@ -133,7 +133,6 @@ func Test_Shading_an_Intersection(t *testing.T) {
 	}
 }
 
-
 // Scenario: Shading an intersection from the inside
 // Given world ← default_world()
 // And world.light ← point_light(point(0, 0.25, 0), color(1, 1, 1))
@@ -147,14 +146,14 @@ func Test_Shading_an_Intersection_from_the_Inside(t *testing.T) {
 	// Given
 	world := DefaultWorld()
 	// And
-	light := lights.NewPointLight(tuples.Point(0, 0.25, 0), colors.NewColor(1, 1, 1))
+	light := lights.NewPointLight(tuples.Point(0, 0.25, 0), colors.White())
 	world.LightSource = &light
 	// And
 	ray := rays.NewRay(tuples.Point(0, 0, 0), tuples.Vector(0, 0, 1))
 	// And
-	shape := world.Objects[0]
+	shape := world.Objects[1]
 	// And
-	hit := rays.NewIntersection(4, &shape)
+	hit := rays.NewIntersection(0.5, &shape)
 	// When
 	hit.PrepareHit(*ray)
 	// And

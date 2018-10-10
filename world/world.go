@@ -58,6 +58,11 @@ func (w World) Intersect(ray rays.Ray) *rays.Intersections {
 	return rays.NewIntersections(xsArray)
 }
 
-func (w World) ShadeHit(hit rays.Intersection) colors.Color{
-	return colors.Black()
+// ShadeHit calculates the color of a hit in the world
+func (w World) ShadeHit(hit rays.Intersection) colors.Color {
+	return hit.Object.Material.Lighting(
+		*w.LightSource,
+		hit.Point,
+		hit.EyeV,
+		hit.NormalV)
 }

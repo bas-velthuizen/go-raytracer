@@ -147,7 +147,7 @@ func Test_An_Intersection_Occurs_on_the_Inside(t *testing.T) {
 	// And
 	if !hit.Inside {
 		t.Errorf("hit.Inside = %v, expected %v", hit.Inside, true)
-	}	// And
+	}
 	// And
 	if !hit.NormalV.Equals(wantedN) {
 		t.Errorf("hit.NormalV = %v, expected %v", hit.NormalV, wantedN)
