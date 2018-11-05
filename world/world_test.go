@@ -210,22 +210,22 @@ func Test_the_Color_When_a_Ray_Hits(t *testing.T) {
 // And outer.material.ambient ← 1
 // And inner ← the second object in world
 // And inner.material.ambient ← 1
-// And ray ← ray(point(0, 0, -0.75), vector(0, 0, 1))
+// And ray ← ray(point(0, 0, 0.75), vector(0, 0, -1))
 // When c ← color_at(world, ray)
 // Then c = inner.material.color
 func Test_the_Color_With_an_Intersection_Behind_the_Ray(t *testing.T) {
 	// Given
 	world := DefaultWorld()
 	// And
-	outer := world.Objects[0]
+	outer := &(world.Objects[0])
 	// And
 	outer.Material.Ambient = 1
 	// And
-	inner := world.Objects[1]
+	inner := &(world.Objects[1])
 	// And
 	inner.Material.Ambient = 1
 	// And
-	ray := rays.NewRay(tuples.Point(0, 0, -0.75), tuples.Vector(0, 0, 1))
+	ray := rays.NewRay(tuples.Point(0, 0, 0.75), tuples.Vector(0, 0, -1))
 	// When
 	c := world.ColorAt(*ray)
 	// Expected
