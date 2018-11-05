@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/bas-velthuizen/go-raytracer/matrix"
+	"github.com/bas-velthuizen/go-raytracer/tuples"
 )
 
 // Translation creates a new translation matrix
@@ -67,4 +68,9 @@ func Shearing(xy, xz, yx, yz, zx, zy float64) *matrix.Matrix {
 	t.Set(2, 0, zx)
 	t.Set(2, 1, zy)
 	return t
+}
+
+// NewViewTransform creates a view matrix defined by the fromPoint, toPoint and upVector
+func NewViewTransform(fromPoint, toPoint, upVector tuples.Tuple) matrix.Matrix {
+	return *matrix.Identity(4)
 }
